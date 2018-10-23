@@ -64,8 +64,7 @@ public class Main extends Application
 	@Override
 	public void start(Stage primaryStage)
 	{
-		applicationWindows.add(new PasswordWindow(""));
-//		applicationWindows.add(new HomeWindow());
+		applicationWindows.add(new HomeWindow());
 	}
 
 	public static void main(String[] args)

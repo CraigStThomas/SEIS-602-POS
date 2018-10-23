@@ -23,37 +23,33 @@ public abstract class BaseWindow
 	protected GridPane rightPane;
 	protected VBox bottomPane;
 
+	protected abstract VBox     createTopPane();
 	protected abstract GridPane createLeftPane();
 	protected abstract GridPane createCenterPane();
 	protected abstract GridPane createRightPane();
 	protected abstract VBox     createBottomPane();
+
+	protected Object answer;
 
 	protected void closeWindow()
 	{
 		stage.close();
 	}
 
-	protected VBox createTopPane()
+	public BaseWindow()
 	{
-		Menu menu0 = new Menu("File");
-
-		MenuItem menuItem = new MenuItem("Exit");
-		menuItem.setOnAction(e -> closeWindow());
-		menu0.getItems().add(menuItem);
-
-		MenuBar menuBar = new MenuBar();
-
-		menuBar.getMenus().addAll(menu0);
-
-		VBox myVBox = new VBox();
-		myVBox.setPadding(new Insets(0, 0, 0, 0));
-
-		myVBox.getChildren().addAll(menuBar);
-
-		return myVBox;
+		buildStage(false);
 	}
 
-	public BaseWindow()
+	public BaseWindow(boolean buildIt)
+	{
+		if (buildIt == true)
+		{
+			buildStage(false);
+		}
+	}
+
+	protected Object buildStage(boolean showAndWait)
 	{
 		stage = new Stage();
 		mainLayout = new BorderPane();
@@ -79,10 +75,18 @@ public abstract class BaseWindow
 			e.consume(); // consumes the request to close the window, we are going to handle it manually
 			closeWindow();
 		});
-		stage.setTitle("Base Window");
 		stage.setScene(scene);
 		stage.sizeToScene();
-		stage.show();
+		if (showAndWait == true)
+		{
+			stage.showAndWait();
+			return answer;
+		}
+		else
+		{
+			stage.show();
+			return null;
+		}
 	}
 
 }

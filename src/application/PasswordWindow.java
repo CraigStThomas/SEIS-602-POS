@@ -1,22 +1,54 @@
 package application;
 
-import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 
-public class PasswordWindow extends BaseWindow
+public abstract class PasswordWindow extends BaseWindow
 {
+	protected Label instructionsLabel;
+	protected TextField usernameInput;
+	protected TextField passwordInput;
+
 	public PasswordWindow(String title)
 	{
-		super();
+		super(false);
 
-		stage.setTitle(title);
-		mainLayout.requestFocus();	//this prevents a textfield from defaulting to focus, so we can read the prompt text
+		if (title != null)
+		{
+			instructionsLabel = new Label(title);
+			instructionsLabel.setFont(new Font("Courier New", 12));
+		}
+	}
+
+	protected abstract void checkLogin();
+
+	@Override
+	protected VBox createTopPane()
+	{
+		if (instructionsLabel != null)
+		{
+			VBox myVBox = new VBox();
+			myVBox.setPadding(new Insets(10, 10, 10, 10));
+			myVBox.setAlignment(Pos.CENTER);
+
+			myVBox.getChildren().addAll(instructionsLabel);
+
+			return myVBox;
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 	@Override
@@ -34,15 +66,15 @@ public class PasswordWindow extends BaseWindow
 		int horizontalIndex = 0;
 
 		Label usernameLabel = new Label("Username:");
-		TextField usernameInput = new TextField();
+		usernameInput = new TextField();
 		usernameInput.setPromptText("type: banana");
 		Label passwordLabel = new Label("Password:");
-		TextField passwordInput = new TextField();
+		passwordInput = new TextField();
 		passwordInput.setPromptText("type: apple");
 		Button loginButton = new Button("Log In");
 		loginButton.setOnAction(e ->
 		{
-			Main.setLoginValid(true);
+			checkLogin();
 		});
 
 		horizontalIndex = 0;
