@@ -41,6 +41,7 @@ public class RegisterWindow extends BaseWindow
     Button printReportButton;
     Button closeRegisterButton;
     Button newTransactionButton;
+    Button itemReturnButton;
 
     void disableRegisterButtons()
     {
@@ -49,6 +50,7 @@ public class RegisterWindow extends BaseWindow
     	printReportButton.setDisable(true);
     	closeRegisterButton.setDisable(true);
     	newTransactionButton.setDisable(true);
+    	itemReturnButton.setDisable(true);
     }
 
     void enableRegisterButtons()
@@ -58,6 +60,7 @@ public class RegisterWindow extends BaseWindow
     	printReportButton.setDisable(false);
     	closeRegisterButton.setDisable(false);
     	newTransactionButton.setDisable(false);
+    	itemReturnButton.setDisable(false);
     }
 
     void loginCashier()
@@ -137,6 +140,8 @@ public class RegisterWindow extends BaseWindow
 
     protected GridPane createTransaction()
     {
+    	disableRegisterButtons();
+
     	GridPane myGridPane = new GridPane();
 
     	if (mySampleItems == null)
@@ -281,6 +286,8 @@ public class RegisterWindow extends BaseWindow
 		Button completeTransactionButton = new Button("Complete Transaction");
 		completeTransactionButton.setOnAction(e ->
 		{
+			newTransactionButton.setDisable(false);
+			itemReturnButton.setDisable(false);
 			mainLayout.setRight(null);
 	        stage.sizeToScene();
 		});
@@ -292,6 +299,8 @@ public class RegisterWindow extends BaseWindow
         Button cancelTransactionButton = new Button("Cancel Transaction");
         cancelTransactionButton.setOnAction(e ->
         {
+        	newTransactionButton.setDisable(false);
+        	itemReturnButton.setDisable(false);
         	mainLayout.setRight(null);
             stage.sizeToScene();
         });
@@ -302,6 +311,13 @@ public class RegisterWindow extends BaseWindow
 		myGridPane.setStyle("-fx-border-color: black");
 
 		return myGridPane;
+    }
+
+    protected GridPane itemReturn()
+    {
+    	disableRegisterButtons();
+
+    	return createTransaction();
     }
 
     @Override
@@ -425,6 +441,16 @@ public class RegisterWindow extends BaseWindow
         GridPane.setConstraints(newTransactionButton, 0, index++);
         GridPane.setMargin(newTransactionButton, new Insets(25, 5, 5, 5));
         myGridPane.getChildren().add(newTransactionButton);
+
+        itemReturnButton = new Button("Item Return");
+        itemReturnButton.setOnAction(e ->
+        {
+        	mainLayout.setRight(itemReturn());
+            stage.sizeToScene();
+        });
+        GridPane.setConstraints(itemReturnButton, 0, index++);
+        GridPane.setMargin(itemReturnButton, new Insets(5, 5, 5, 5));
+        myGridPane.getChildren().add(itemReturnButton);
 
         disableRegisterButtons();
         cashierLoginButton.setDisable(false);

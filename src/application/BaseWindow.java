@@ -1,10 +1,6 @@
 package application;
 
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -77,6 +73,7 @@ public abstract class BaseWindow
 		});
 		stage.setScene(scene);
 		stage.sizeToScene();
+		mainLayout.requestFocus();
 		if (showAndWait == true)
 		{
 			stage.showAndWait();

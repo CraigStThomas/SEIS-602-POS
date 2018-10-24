@@ -81,7 +81,7 @@ public class HomeWindow extends BaseWindow
 		Button viewUser = new Button("Users");
 		viewUser.setOnAction(e ->
 		{
-//			Main.getApplicationWindows().add(new UsersWindow());
+			Main.getApplicationWindows().add(new UsersWindow());
 		});
 		GridPane.setConstraints(viewUser, 0, index++);
 		GridPane.setMargin(viewUser, new Insets(5, 5, 5, 5));
@@ -97,9 +97,9 @@ public class HomeWindow extends BaseWindow
 		myGridPane.getChildren().add(viewOrders);
 
 		Button viewInventory = new Button("Inventory");
-		viewOrders.setOnAction(e ->
+		viewInventory.setOnAction(e ->
 		{
-//			Main.getApplicationWindows().add(new InventoryWindow());
+			Main.getApplicationWindows().add(new InventoryWindow());
 		});
 		GridPane.setConstraints(viewInventory, 0, index++);
 		GridPane.setMargin(viewInventory, new Insets(5, 5, 5, 5));

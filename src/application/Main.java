@@ -64,6 +64,9 @@ public class Main extends Application
 	@Override
 	public void start(Stage primaryStage)
 	{
+		Inventory inventory = new Inventory();
+		Users users = new Users();
+
 		applicationWindows.add(new HomeWindow());
 	}
 
