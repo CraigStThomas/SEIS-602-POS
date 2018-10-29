@@ -5,15 +5,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 
 public class HomeWindow extends BaseWindow
 {
-	protected String adminUsername = "banana";
-	protected String adminPassword = "apple";
-
 	private class AdminCheck extends PasswordWindow
 	{
 		public AdminCheck()
@@ -24,7 +22,7 @@ public class HomeWindow extends BaseWindow
 		@Override
 		protected void checkLogin()
 		{
-			if (true)//(usernameInput.getText().equals(adminUsername) && passwordInput.getText().equals(adminPassword))
+			if (UsersList.validateAdmin(usernameInput.getText(), passwordInput.getText()))
 			{
 				answer = new Boolean(true);
 				stage.close();
@@ -40,30 +38,34 @@ public class HomeWindow extends BaseWindow
 
 		if ((Boolean)adminCheck.buildStage(true))
 		{
-			buildStage(true);
-			stage.setTitle("Home Window");
+			buildStage(false);
+			stage.setTitle("POS: Admin Window");
+			stage.setMinWidth(300);
+//			stage.setMinHeight(190);
+//			stage.setResizable(false);
 		}
 	}
 
 	@Override
 	protected VBox createTopPane()
 	{
-		Menu menu0 = new Menu("File");
-
-		MenuItem menuItem = new MenuItem("Exit");
-		menuItem.setOnAction(e -> closeWindow());
-		menu0.getItems().add(menuItem);
-
-		MenuBar menuBar = new MenuBar();
-
-		menuBar.getMenus().addAll(menu0);
-
-		VBox myVBox = new VBox();
-		myVBox.setPadding(new Insets(0, 0, 0, 0));
-
-		myVBox.getChildren().addAll(menuBar);
-
-		return myVBox;
+//		Menu menu0 = new Menu("File");
+//
+//		MenuItem menuItem = new MenuItem("Exit");
+//		menuItem.setOnAction(e -> closeWindow());
+//		menu0.getItems().add(menuItem);
+//
+//		MenuBar menuBar = new MenuBar();
+//
+//		menuBar.getMenus().addAll(menu0);
+//
+//		VBox myVBox = new VBox();
+//		myVBox.setPadding(new Insets(0, 0, 0, 0));
+//
+//		myVBox.getChildren().addAll(menuBar);
+//
+//		return myVBox;
+		return null;
 	}
 
 	@Override
@@ -90,7 +92,7 @@ public class HomeWindow extends BaseWindow
 		Button viewOrders = new Button("Orders");
 		viewOrders.setOnAction(e ->
 		{
-//			Main.getApplicationWindows().add(new OrdersWindow());
+			Main.getApplicationWindows().add(new OrderListWindow());
 		});
 		GridPane.setConstraints(viewOrders, 0, index++);
 		GridPane.setMargin(viewOrders, new Insets(5, 5, 5, 5));
@@ -99,17 +101,31 @@ public class HomeWindow extends BaseWindow
 		Button viewInventory = new Button("Inventory");
 		viewInventory.setOnAction(e ->
 		{
-			Main.getApplicationWindows().add(new InventoryWindow());
+			Main.getApplicationWindows().add(new InventoryWindow(false, true));
 		});
 		GridPane.setConstraints(viewInventory, 0, index++);
 		GridPane.setMargin(viewInventory, new Insets(5, 5, 5, 5));
 		myGridPane.getChildren().add(viewInventory);
 
+		TextField registerID = new TextField();
+		registerID.setPromptText("set register ID");
+		GridPane.setConstraints(registerID, 1, index);
+		GridPane.setMargin(registerID, new Insets(5, 5, 5, 5));
+		myGridPane.getChildren().add(registerID);
+
 		Button createRegister = new Button("Create\nRegister");
 		createRegister.setTextAlignment(TextAlignment.CENTER);
 		createRegister.setOnAction(e ->
 		{
-			Main.getApplicationWindows().add(new RegisterWindow());
+			if (!registerID.getText().equals(""))
+			{
+				Register myRegister = new Register();
+				myRegister.setId(registerID.getText());
+				myRegister.setModel("B.47A");
+				myRegister.setVendor("Acme Registers");
+				mainLayout.setCenter(createCenterPane());
+				Main.getApplicationWindows().add(new RegisterWindow(myRegister));
+			}
 		});
 		GridPane.setConstraints(createRegister, 0, index++);
 		GridPane.setMargin(createRegister, new Insets(5, 5, 5, 5));

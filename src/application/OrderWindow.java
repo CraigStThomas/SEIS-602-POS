@@ -1,6 +1,6 @@
 package application;
 
-import java.util.LinkedList;
+import com.sun.corba.se.impl.resolver.ORBDefaultInitRefResolverImpl;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -9,52 +9,39 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
-public class InventoryWindow extends BaseWindow
+public class OrderWindow extends BaseWindow
 {
-	boolean answerRequested;
-	boolean refreshRequested;
-	LinkedList<Button> itemButtons;
+	Order order;
 
-	public InventoryWindow(boolean answerWanted, boolean refreshWanted)
+	public OrderWindow(Order inputOrder)
 	{
 		super(false);
 
-		answerRequested = answerWanted;
-		refreshRequested = refreshWanted;
-
-		if (answerRequested)
-		{
-			itemButtons = new LinkedList<>();
-		}
-		else
-		{
-			buildStage(false);
-			stage.setTitle("Inventory");
-		}
-//		buildStage(false);
-//		stage.setTitle("Inventory");
+		order = inputOrder;
+		buildStage(false);
 	}
 
-	private EventHandler<ActionEvent> pickMe()
-    {
-        return new EventHandler<ActionEvent>()
-        {
-            public void handle(ActionEvent event)
-            {
-                for (int i = 0; i < itemButtons.size(); i++)
-                {
-                    if (event.getSource() == itemButtons.get(i))
-                    {
-                    	answer = Inventory.prod_list.get(i).getItem();
-                    	stage.close();
-                    }
-                }
-            }
-        };
-    }
-
 	@Override
-	protected VBox createTopPane() {return null;}
+	protected VBox createTopPane()
+	{
+		VBox myVBox = new VBox(5);
+
+		Label orderIDlabel = new Label("Order ID:");
+		orderIDlabel.setStyle("-fx-font-weight: bold");
+
+		Label orderIDvalue = new Label(order.getId());
+
+		Label orderDateLabel = new Label("Order Date:");
+		orderDateLabel.setStyle("-fx-font-weight: bold");
+
+		Label orderDateValue = new Label(order.getDate());
+
+		myVBox.setPadding(new Insets(5, 5, 5, 5));
+
+		myVBox.getChildren().addAll(orderIDlabel, orderIDvalue, orderDateLabel, orderDateValue);
+
+		return myVBox;
+	}
 
 	@Override
 	protected GridPane createLeftPane() {return null;}
@@ -63,8 +50,31 @@ public class InventoryWindow extends BaseWindow
 	protected GridPane createCenterPane()
 	{
 		GridPane myGridPane = new GridPane();
+
 		int verticalIndex = 0;
 		int horizontalIndex = 0;
+
+//		Label orderIDlabel = new Label("Order ID:");
+//		orderIDlabel.setStyle("-fx-font-weight: bold");
+//		GridPane.setConstraints(orderIDlabel, horizontalIndex, verticalIndex++);
+//		GridPane.setMargin(orderIDlabel, new Insets(5, 5, 5, 5));
+//		myGridPane.getChildren().add(orderIDlabel);
+//
+//		Label orderIDvalue = new Label(order.getId());
+//		GridPane.setConstraints(orderIDvalue, horizontalIndex, verticalIndex++);
+//		GridPane.setMargin(orderIDvalue, new Insets(5, 5, 5, 5));
+//		myGridPane.getChildren().add(orderIDvalue);
+//
+//		Label orderDateLabel = new Label("Order Date:");
+//		orderDateLabel.setStyle("-fx-font-weight: bold");
+//		GridPane.setConstraints(orderDateLabel, horizontalIndex, verticalIndex++);
+//		GridPane.setMargin(orderDateLabel, new Insets(5, 5, 5, 5));
+//		myGridPane.getChildren().add(orderDateLabel);
+//
+//		Label orderDateValue = new Label(order.getDate());
+//		GridPane.setConstraints(orderDateValue, horizontalIndex, verticalIndex++);
+//		GridPane.setMargin(orderDateValue, new Insets(5, 5, 5, 5));
+//		myGridPane.getChildren().add(orderDateValue);
 
 		Label itemNameLabel = new Label("Item Name");
 		itemNameLabel.setStyle("-fx-font-weight: bold");
@@ -102,69 +112,75 @@ public class InventoryWindow extends BaseWindow
 		GridPane.setMargin(itemSupplierLabel, new Insets(5, 5, 5, 5));
 		myGridPane.getChildren().add(itemSupplierLabel);
 
-		for (int i = 0; i < Inventory.prod_list.size(); i++)
+		for (int i = 0; i < order.getProductList().size(); i++)
 		{
 			horizontalIndex = 0;
 
-			Label itemName = new Label(Inventory.prod_list.get(i).getItem().getName());
+			Label itemName = new Label(order.getProductList().get(i).getItem().getName());
 			GridPane.setConstraints(itemName, horizontalIndex++, verticalIndex);
 			GridPane.setMargin(itemName, new Insets(5, 5, 5, 5));
 			myGridPane.getChildren().add(itemName);
 
-			Label itemCost = new Label(Double.toString(Inventory.prod_list.get(i).getItem().getPrice()));
+			Label itemCost = new Label(Double.toString(order.getProductList().get(i).getItem().getPrice()));
 			GridPane.setConstraints(itemCost, horizontalIndex++, verticalIndex);
 			GridPane.setMargin(itemCost, new Insets(5, 5, 5, 5));
 			myGridPane.getChildren().add(itemCost);
 
-			Label itemID = new Label(Inventory.prod_list.get(i).getItem().getId());
+			Label itemID = new Label(order.getProductList().get(i).getItem().getId());
 			GridPane.setConstraints(itemID, horizontalIndex++, verticalIndex);
 			GridPane.setMargin(itemID, new Insets(5, 5, 5, 5));
 			myGridPane.getChildren().add(itemID);
 
-			Label itemQuantity = new Label(Integer.toString(Inventory.prod_list.get(i).getQty()));
+			Label itemQuantity = new Label(Integer.toString(order.getProductList().get(i).getQty()));
 			GridPane.setConstraints(itemQuantity, horizontalIndex++, verticalIndex);
 			GridPane.setMargin(itemQuantity, new Insets(5, 5, 5, 5));
 			myGridPane.getChildren().add(itemQuantity);
 
-			Label itemThreshold = new Label(Integer.toString(Inventory.prod_list.get(i).getThreshold()));
+			Label itemThreshold = new Label(Integer.toString(order.getProductList().get(i).getThreshold()));
 			GridPane.setConstraints(itemThreshold, horizontalIndex++, verticalIndex);
 			GridPane.setMargin(itemThreshold, new Insets(5, 5, 5, 5));
 			myGridPane.getChildren().add(itemThreshold);
 
-			Label itemSupplier = new Label(Inventory.prod_list.get(i).getSupplier());
+			Label itemSupplier = new Label(order.getProductList().get(i).getSupplier());
 			GridPane.setConstraints(itemSupplier, horizontalIndex++, verticalIndex);
 			GridPane.setMargin(itemSupplier, new Insets(5, 5, 5, 5));
 			myGridPane.getChildren().add(itemSupplier);
 
-			if (answerRequested)
-			{
-				EventHandler<ActionEvent> action = pickMe();
-				Button itemButton = new Button("pick me");
-				itemButton.setOnAction(action);
-				itemButtons.add(itemButton);
-				GridPane.setConstraints(itemButton, horizontalIndex++, verticalIndex);
-				GridPane.setMargin(itemButton, new Insets(5, 5, 5, 5));
-				myGridPane.getChildren().add(itemButton);
-				if (Inventory.prod_list.get(i).getQty() <= 0)
-				{
-					itemButton.setDisable(true);
-				}
-			}
-
 			verticalIndex++;
 		}
 
-		if (refreshRequested)
+		if (order.getOrderReceived() == false)
 		{
-			Button refreshButton = new Button("Refresh\nInventory");
-			refreshButton.setOnAction(e ->
+			Button receiveOrderButton = new Button("Receive\nOrder");
+			receiveOrderButton.setOnAction(e ->
 			{
+				for (int i = 0; i < order.getProductList().size(); i++)
+				{
+					boolean createNewProduct = true;
+
+					for (int j = 0; j < Inventory.prod_list.size(); j++)
+					{
+						if (order.getProductList().get(i).equals(Inventory.prod_list.get(j)))
+						{
+							createNewProduct = false;
+							Inventory.prod_list.get(j).setQty(Inventory.prod_list.get(j).getQty() + order.getProductList().get(i).getQty());
+							break;
+						}
+					}
+
+					if (createNewProduct)
+					{
+						Inventory.addProduct(order.getProductList().get(i));
+					}
+				}
+
+				order.setOrderReceived(true);
 				mainLayout.setCenter(createCenterPane());
 				stage.sizeToScene();
 			});
-			GridPane.setConstraints(refreshButton, 0, verticalIndex);
-			GridPane.setMargin(refreshButton, new Insets(5, 5, 5, 5));
-			myGridPane.getChildren().add(refreshButton);
+			GridPane.setConstraints(receiveOrderButton, 0, verticalIndex);
+			GridPane.setMargin(receiveOrderButton, new Insets(5, 5, 5, 5));
+			myGridPane.getChildren().add(receiveOrderButton);
 		}
 
 		return myGridPane;
@@ -175,6 +191,5 @@ public class InventoryWindow extends BaseWindow
 
 	@Override
 	protected VBox createBottomPane() {return null;}
-
 
 }

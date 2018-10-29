@@ -1,6 +1,8 @@
 package application;
 
+import java.util.Calendar;
 import java.util.LinkedList;
+import java.util.UUID;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -9,8 +11,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import sun.awt.image.ImageWatched.Link;
 
 public class RegisterWindow extends BaseWindow
 {
@@ -24,57 +28,82 @@ public class RegisterWindow extends BaseWindow
 		@Override
 		protected void checkLogin()
 		{
-			if (true)
+			Cashier returnCashier = UsersList.validateUserCredentials(usernameInput.getText(), passwordInput.getText());
+			if (returnCashier != null)
 			{
-				answer = new Boolean(true);
+				answer = returnCashier;
 				stage.close();
 			}
 		}
 	}
 
-    LinkedList<Item> mySampleItems;
+//    LinkedList<Item> mySampleItems;
     LinkedList<Button> removeItemButtons;
+    Transaction myTransaction;
+    CashierDrawer cashierDrawer;
+    Register thisRegister;
 
     boolean validCashier;
+    Cashier thisCashier;
     Button cashierLoginButton;
     Button cashierLogoutButton;
-    Button printReportButton;
+//    Button printReportButton;
     Button closeRegisterButton;
     Button newTransactionButton;
     Button itemReturnButton;
+
+    @Override
+    protected void closeWindow()
+	{
+//		stage.close();
+	}
 
     void disableRegisterButtons()
     {
     	cashierLoginButton.setDisable(true);
     	cashierLogoutButton.setDisable(true);
-    	printReportButton.setDisable(true);
-    	closeRegisterButton.setDisable(true);
+//    	printReportButton.setDisable(true);
+//    	closeRegisterButton.setDisable(true);
     	newTransactionButton.setDisable(true);
     	itemReturnButton.setDisable(true);
     }
 
     void enableRegisterButtons()
     {
-    	cashierLoginButton.setDisable(false);
+    	if (validCashier == false)
+    	{
+    		cashierLoginButton.setDisable(false);
+    	}
     	cashierLogoutButton.setDisable(false);
-    	printReportButton.setDisable(false);
-    	closeRegisterButton.setDisable(false);
+//    	printReportButton.setDisable(false);
+//    	closeRegisterButton.setDisable(false);
     	newTransactionButton.setDisable(false);
     	itemReturnButton.setDisable(false);
     }
 
     void loginCashier()
     {
+
+    	cashierDrawer = new CashierDrawer();
+    	cashierDrawer.cashier = thisCashier;
+    	cashierDrawer.register = thisRegister;
+    	cashierDrawer.loginTime = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+
     	validCashier = true;
     	cashierLoginButton.setDisable(true);
     	cashierLogoutButton.setDisable(false);
+    	closeRegisterButton.setDisable(true);
     }
 
     void logoutCashier()
     {
+    	cashierDrawer.logoutTime = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+    	//todo: something with the cashier drawer
+
     	validCashier = false;
     	cashierLoginButton.setDisable(false);
     	cashierLogoutButton.setDisable(true);
+    	closeRegisterButton.setDisable(false);
     }
 
     void closeRegister()
@@ -82,28 +111,45 @@ public class RegisterWindow extends BaseWindow
     	stage.close();
     }
 
-    public RegisterWindow()
+    public RegisterWindow(Register inputRegister)
     {
-    	super();
-		stage.setTitle("Register");
+    	super(false);
+    	thisCashier = new Cashier();
+		thisRegister = inputRegister;
     	validCashier = false;
+    	buildStage(false);
+		stage.setTitle("Register");
     }
 
-    private EventHandler<ActionEvent> removeItem(int itemIndex)
+    private EventHandler<ActionEvent> removeItemTransaction(int itemIndex)
     {
         return new EventHandler<ActionEvent>()
         {
             public void handle(ActionEvent event)
             {
-                for (int i = 0; i < removeItemButtons.size(); i++)
-                {
-                    if (event.getSource() == removeItemButtons.get(i))
-                    {
-                        mySampleItems.remove(i);
+//                for (int i = 0; i < removeItemButtons.size(); i++)
+//                {
+//                    if (event.getSource() == removeItemButtons.get(i))
+//                    {
+            			Inventory.buyItem(myTransaction.items.get(itemIndex));
+                    	myTransaction.items.remove(itemIndex);
                         mainLayout.setRight(createTransaction());
                         stage.sizeToScene();
-                    }
-                }
+//                    }
+//                }
+            }
+        };
+    }
+
+    private EventHandler<ActionEvent> removeItemItemReturn(int itemIndex)
+    {
+        return new EventHandler<ActionEvent>()
+        {
+            public void handle(ActionEvent event)
+            {
+            	myTransaction.items.remove(itemIndex);
+                mainLayout.setRight(itemReturn(myTransaction));
+                stage.sizeToScene();
             }
         };
     }
@@ -114,26 +160,33 @@ public class RegisterWindow extends BaseWindow
         {
             public void handle(ActionEvent event)
             {
-                switch ((int)(Math.random() * ((5) + 1)))
-                {
-                    case 0:
-                        mySampleItems.add(new Item("83nf8", 1.95,  "banana"));
-                        break;
-                    case 1:
-                        mySampleItems.add(new Item("asbp9", 22.15, "pretzels"));
-                        break;
-                    case 2:
-                        mySampleItems.add(new Item("e8hen", 12.05, "potato"));
-                        break;
-                    case 3:
-                        mySampleItems.add(new Item("sd0v8", 7.35,  "shirt"));
-                        break;
-                    default:
-                        mySampleItems.add(new Item("sav8h", 2.77,  "crayons"));
-                        break;
-                }
-                mainLayout.setRight(createTransaction());
-                stage.sizeToScene();
+//                switch ((int)(Math.random() * ((5) + 1)))
+//                {
+//                    case 0:
+//                        mySampleItems.add(new Item("83nf8", 1.95,  "banana"));
+//                        break;
+//                    case 1:
+//                        mySampleItems.add(new Item("asbp9", 22.15, "pretzels"));
+//                        break;
+//                    case 2:
+//                        mySampleItems.add(new Item("e8hen", 12.05, "potato"));
+//                        break;
+//                    case 3:
+//                        mySampleItems.add(new Item("sd0v8", 7.35,  "shirt"));
+//                        break;
+//                    default:
+//                        mySampleItems.add(new Item("sav8h", 2.77,  "crayons"));
+//                        break;
+//                }
+            	InventoryWindow testInventory = new InventoryWindow(true, false);
+            	Item thisItem = (Item)testInventory.buildStage(true);
+            	if (thisItem != null)
+            	{
+	            	Inventory.sellItem(thisItem);
+	            	myTransaction.items.add(thisItem);
+	                mainLayout.setRight(createTransaction());
+	                stage.sizeToScene();
+            	}
             }
         };
     }
@@ -144,35 +197,46 @@ public class RegisterWindow extends BaseWindow
 
     	GridPane myGridPane = new GridPane();
 
-    	if (mySampleItems == null)
+    	if (myTransaction == null)
     	{
-    		mySampleItems = new LinkedList<>();
+//    		mySampleItems = new LinkedList<>();
     		removeItemButtons = new LinkedList<>();
+    		myTransaction = new Transaction();
 
-    		mySampleItems.add(new Item("83nf8", 1.95,  "banana"));
-            mySampleItems.add(new Item("asbp9", 22.15, "pretzels"));
-            mySampleItems.add(new Item("e8hen", 12.05, "potato"));
-            mySampleItems.add(new Item("sd0v8", 7.35,  "shirt"));
-            mySampleItems.add(new Item("sav8h", 2.77,  "crayons"));
+    		myTransaction.setDate(java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()));
+    		myTransaction.setCashier(thisCashier);
+    		myTransaction.setRegister(thisRegister);
+    		myTransaction.setId(UUID.randomUUID().toString().replace("-", "").substring(0, 10));
     	}
 
 		int index = 0;
 
 		//cashier
-		Label cashierTitle = new Label("Cashier:");
-		cashierTitle.setStyle("-fx-font-weight: bold");
-		Label cashierValue = new Label("That Guy");
-		GridPane.setConstraints(cashierTitle, 0, index++);
-		GridPane.setMargin(cashierTitle, new Insets(5, 5, 0, 5));
-		myGridPane.getChildren().add(cashierTitle);
+		Label cashierNameTitle = new Label("Cashier Name:");
+		cashierNameTitle.setStyle("-fx-font-weight: bold");
+		Label cashierValue = new Label(thisCashier.getName());
+		GridPane.setConstraints(cashierNameTitle, 0, index++);
+		GridPane.setMargin(cashierNameTitle, new Insets(5, 5, 0, 5));
+		myGridPane.getChildren().add(cashierNameTitle);
 		GridPane.setConstraints(cashierValue, 0, index++);
 		GridPane.setMargin(cashierValue, new Insets(0, 5, 5, 5));
 		myGridPane.getChildren().add(cashierValue);
 
+		//cashier ID
+		Label cashierIDTitle = new Label("Cashier ID:");
+		cashierIDTitle.setStyle("-fx-font-weight: bold");
+		Label cashierIDValue = new Label(thisCashier.getId());
+		GridPane.setConstraints(cashierIDTitle, 0, index++);
+		GridPane.setMargin(cashierIDTitle, new Insets(5, 5, 0, 5));
+		myGridPane.getChildren().add(cashierIDTitle);
+		GridPane.setConstraints(cashierIDValue, 0, index++);
+		GridPane.setMargin(cashierIDValue, new Insets(0, 5, 5, 5));
+		myGridPane.getChildren().add(cashierIDValue);
+
 		//register ID
 		Label registerIDtitle = new Label("Register ID:");
 		registerIDtitle.setStyle("-fx-font-weight: bold");
-		Label registerIDvalue = new Label("97whghb4");
+		Label registerIDvalue = new Label(thisRegister.getId());
 		GridPane.setConstraints(registerIDtitle, 0, index++);
 		GridPane.setMargin(registerIDtitle, new Insets(5, 5, 0, 5));
 		myGridPane.getChildren().add(registerIDtitle);
@@ -183,7 +247,7 @@ public class RegisterWindow extends BaseWindow
 		//transaction ID
 		Label transactionrIDtitle = new Label("Transaction ID:");
 		transactionrIDtitle.setStyle("-fx-font-weight: bold");
-		Label transactionIDvalue = new Label("sdbasb7sg232");
+		Label transactionIDvalue = new Label(myTransaction.getId());
 		GridPane.setConstraints(transactionrIDtitle, 0, index++);
 		GridPane.setMargin(transactionrIDtitle, new Insets(5, 5, 0, 5));
 		myGridPane.getChildren().add(transactionrIDtitle);
@@ -191,21 +255,10 @@ public class RegisterWindow extends BaseWindow
 		GridPane.setMargin(transactionIDvalue, new Insets(0, 5, 5, 5));
 		myGridPane.getChildren().add(transactionIDvalue);
 
-		//customer
-		Label customerNameTitle = new Label("Customer Name:");
-		customerNameTitle.setStyle("-fx-font-weight: bold");
-		Label customerNameValue = new Label("Someone buying stuff");
-		GridPane.setConstraints(customerNameTitle, 0, index++);
-		GridPane.setMargin(customerNameTitle, new Insets(5, 5, 0, 5));
-		myGridPane.getChildren().add(customerNameTitle);
-		GridPane.setConstraints(customerNameValue, 0, index++);
-		GridPane.setMargin(customerNameValue, new Insets(0, 5, 5, 5));
-		myGridPane.getChildren().add(customerNameValue);
-
 		//date
 		Label dateTitle = new Label("Date:");
 		dateTitle.setStyle("-fx-font-weight: bold");
-		Label dateValue = new Label("Yesterday");
+		Label dateValue = new Label(myTransaction.getDate());
 		GridPane.setConstraints(dateTitle, 0, index++);
 		GridPane.setMargin(dateTitle, new Insets(5, 5, 0, 5));
 		myGridPane.getChildren().add(dateTitle);
@@ -239,22 +292,22 @@ public class RegisterWindow extends BaseWindow
 
 		removeItemButtons = new LinkedList<>();
 
-		for (int i = 0; i < mySampleItems.size(); i++)
+		for (int i = 0; i < myTransaction.items.size(); i++)
 		{
-			Label itemName = new Label(mySampleItems.get(i).itemName);
+			Label itemName = new Label(myTransaction.items.get(i).getName());
 			GridPane.setConstraints(itemName, 0, index);
 			GridPane.setMargin(itemName, new Insets(5, 5, 5, 5));
 			myGridPane.getChildren().add(itemName);
-			Label itemCost = new Label(String.format("%.2f", mySampleItems.get(i).itemCost));
+			Label itemCost = new Label(String.format("%.2f", myTransaction.items.get(i).getPrice()));
 			GridPane.setConstraints(itemCost, 1, index);
 			GridPane.setMargin(itemCost, new Insets(5, 5, 5, 5));
 			myGridPane.getChildren().add(itemCost);
-			Label itemID = new Label(mySampleItems.get(i).itemID);
+			Label itemID = new Label(myTransaction.items.get(i).getId());
 			GridPane.setConstraints(itemID, 2, index);
 			GridPane.setMargin(itemID, new Insets(5, 5, 5, 5));
 			myGridPane.getChildren().add(itemID);
 
-			action = removeItem(i);
+			action = removeItemTransaction(i);
 			Button removeItem = new Button("Remove Item");
 			removeItem.setOnAction(action);
 			GridPane.setConstraints(removeItem, 3, index++);
@@ -271,9 +324,9 @@ public class RegisterWindow extends BaseWindow
 
 		double transactionTotalPrice = 0;
 
-		for (Item item : mySampleItems)
+		for (Item item : myTransaction.items)
 		{
-			transactionTotalPrice += item.itemCost;
+			transactionTotalPrice += item.getPrice();
 		}
 
 		Label transactionTotalValue = new Label(String.format("%.2f", transactionTotalPrice));
@@ -286,21 +339,32 @@ public class RegisterWindow extends BaseWindow
 		Button completeTransactionButton = new Button("Complete Transaction");
 		completeTransactionButton.setOnAction(e ->
 		{
-			newTransactionButton.setDisable(false);
-			itemReturnButton.setDisable(false);
+//			newTransactionButton.setDisable(false);
+//			itemReturnButton.setDisable(false);
+			cashierDrawer.transactionList.add(myTransaction);
+			enableRegisterButtons();
 			mainLayout.setRight(null);
 	        stage.sizeToScene();
 		});
         GridPane.setConstraints(completeTransactionButton, 0, index);
         GridPane.setMargin(completeTransactionButton, new Insets(5, 5, 5, 5));
         myGridPane.getChildren().add(completeTransactionButton);
+        if (myTransaction.items.size() == 0)
+        {
+        	completeTransactionButton.setDisable(true);
+        }
 
         //cancel transaction
         Button cancelTransactionButton = new Button("Cancel Transaction");
         cancelTransactionButton.setOnAction(e ->
         {
-        	newTransactionButton.setDisable(false);
-        	itemReturnButton.setDisable(false);
+//        	newTransactionButton.setDisable(false);
+//        	itemReturnButton.setDisable(false);
+        	for (Item item : myTransaction.items)
+			{
+				Inventory.buyItem(item);
+			}
+        	enableRegisterButtons();
         	mainLayout.setRight(null);
             stage.sizeToScene();
         });
@@ -313,32 +377,238 @@ public class RegisterWindow extends BaseWindow
 		return myGridPane;
     }
 
-    protected GridPane itemReturn()
+    protected GridPane itemReturn(Transaction transaction)
     {
+    	int verticalIndex = 0;
+    	int horizontalIndex = 0;
+
     	disableRegisterButtons();
 
-    	return createTransaction();
+    	GridPane myGridPane = new GridPane();
+
+    	if (transaction == null)
+    	{
+	    	//transaction id label
+	        Label transactionIDtitle = new Label("Transaction ID:");
+	        GridPane.setConstraints(transactionIDtitle, horizontalIndex++, verticalIndex);
+	        GridPane.setMargin(transactionIDtitle, new Insets(5, 5, 5, 5));
+	        myGridPane.getChildren().add(transactionIDtitle);
+
+	        //transaction id textfield
+			TextField transactionID = new TextField();
+			transactionID.setPromptText("transaction ID");
+			GridPane.setConstraints(transactionIDtitle, horizontalIndex++, verticalIndex);
+	        GridPane.setMargin(transactionIDtitle, new Insets(5, 5, 5, 5));
+	        myGridPane.getChildren().add(transactionID);
+
+	        //transaction id button
+	        Button transactionIDbutton = new Button("OK");
+	        transactionIDbutton.setOnAction(e ->
+	        {
+	        	// get the transaction, repaint this screen
+	        	myTransaction = new Transaction();
+	        	myTransaction.setCashier(new Cashier("some guy", "abcd"));
+	        	myTransaction.setRegister(new Register("112233", "", ""));
+	        	myTransaction.setId("111222333");
+	        	myTransaction.setDate("today");
+	        	for (int i = 0; i < Inventory.prod_list.size() && i < 3; i++)
+	        	{
+		        	myTransaction.items.add(Inventory.prod_list.get(i).getItem());
+	        	}
+
+	        	mainLayout.setRight(itemReturn(myTransaction));
+	        	stage.sizeToScene();
+	        });
+	        GridPane.setConstraints(transactionIDbutton, horizontalIndex, verticalIndex);
+	        GridPane.setMargin(transactionIDbutton, new Insets(5, 5, 5, 5));
+	        myGridPane.getChildren().add(transactionIDbutton);
+    	}
+    	else
+    	{
+    		int index = 0;
+
+    		//cashier
+    		Label cashierNameTitle = new Label("Cashier Name:");
+    		cashierNameTitle.setStyle("-fx-font-weight: bold");
+    		Label cashierValue = new Label(thisCashier.getName());
+    		GridPane.setConstraints(cashierNameTitle, 0, index++);
+    		GridPane.setMargin(cashierNameTitle, new Insets(5, 5, 0, 5));
+    		myGridPane.getChildren().add(cashierNameTitle);
+    		GridPane.setConstraints(cashierValue, 0, index++);
+    		GridPane.setMargin(cashierValue, new Insets(0, 5, 5, 5));
+    		myGridPane.getChildren().add(cashierValue);
+
+    		//cashier ID
+    		Label cashierIDTitle = new Label("Cashier ID:");
+    		cashierIDTitle.setStyle("-fx-font-weight: bold");
+    		Label cashierIDValue = new Label(thisCashier.getId());
+    		GridPane.setConstraints(cashierIDTitle, 0, index++);
+    		GridPane.setMargin(cashierIDTitle, new Insets(5, 5, 0, 5));
+    		myGridPane.getChildren().add(cashierIDTitle);
+    		GridPane.setConstraints(cashierIDValue, 0, index++);
+    		GridPane.setMargin(cashierIDValue, new Insets(0, 5, 5, 5));
+    		myGridPane.getChildren().add(cashierIDValue);
+
+    		//register ID
+    		Label registerIDtitle = new Label("Register ID:");
+    		registerIDtitle.setStyle("-fx-font-weight: bold");
+    		Label registerIDvalue = new Label(thisRegister.getId());
+    		GridPane.setConstraints(registerIDtitle, 0, index++);
+    		GridPane.setMargin(registerIDtitle, new Insets(5, 5, 0, 5));
+    		myGridPane.getChildren().add(registerIDtitle);
+    		GridPane.setConstraints(registerIDvalue, 0, index++);
+    		GridPane.setMargin(registerIDvalue, new Insets(0, 5, 5, 5));
+    		myGridPane.getChildren().add(registerIDvalue);
+
+    		//transaction ID
+    		Label transactionrIDtitle = new Label("Transaction ID:");
+    		transactionrIDtitle.setStyle("-fx-font-weight: bold");
+    		Label transactionIDvalue = new Label(myTransaction.getId());
+    		GridPane.setConstraints(transactionrIDtitle, 0, index++);
+    		GridPane.setMargin(transactionrIDtitle, new Insets(5, 5, 0, 5));
+    		myGridPane.getChildren().add(transactionrIDtitle);
+    		GridPane.setConstraints(transactionIDvalue, 0, index++);
+    		GridPane.setMargin(transactionIDvalue, new Insets(0, 5, 5, 5));
+    		myGridPane.getChildren().add(transactionIDvalue);
+
+    		//date
+    		Label dateTitle = new Label("Date:");
+    		dateTitle.setStyle("-fx-font-weight: bold");
+    		Label dateValue = new Label(myTransaction.getDate());
+    		GridPane.setConstraints(dateTitle, 0, index++);
+    		GridPane.setMargin(dateTitle, new Insets(5, 5, 0, 5));
+    		myGridPane.getChildren().add(dateTitle);
+    		GridPane.setConstraints(dateValue, 0, index++);
+    		GridPane.setMargin(dateValue, new Insets(0, 5, 5, 5));
+    		myGridPane.getChildren().add(dateValue);
+
+    		//items
+//    		EventHandler<ActionEvent> action = addItem();
+//    		Button addItem = new Button("Add Item");
+//    		addItem.setOnAction(action);
+//    		GridPane.setConstraints(addItem, 0, index++);
+//    		GridPane.setMargin(addItem, new Insets(5, 5, 5, 5));
+//    		myGridPane.getChildren().add(addItem);
+    		//header
+    		Label itemNameTitle = new Label("Item Name");
+    		itemNameTitle.setStyle("-fx-font-weight: bold");
+    		GridPane.setConstraints(itemNameTitle, 0, index);
+    		GridPane.setMargin(itemNameTitle, new Insets(5, 5, 5, 5));
+    		myGridPane.getChildren().add(itemNameTitle);
+    		Label itemCostTitle = new Label("Item Cost");
+    		itemCostTitle.setStyle("-fx-font-weight: bold");
+    		GridPane.setConstraints(itemCostTitle, 1, index);
+    		GridPane.setMargin(itemCostTitle, new Insets(5, 5, 5, 5));
+    		myGridPane.getChildren().add(itemCostTitle);
+    		Label itemIDtitle = new Label("Item ID");
+    		itemIDtitle.setStyle("-fx-font-weight: bold");
+    		GridPane.setConstraints(itemIDtitle, 2, index++);
+    		GridPane.setMargin(itemIDtitle, new Insets(5, 5, 5, 5));
+    		myGridPane.getChildren().add(itemIDtitle);
+
+    		removeItemButtons = new LinkedList<>();
+
+    		for (int i = 0; i < myTransaction.items.size(); i++)
+    		{
+    			Label itemName = new Label(myTransaction.items.get(i).getName());
+    			GridPane.setConstraints(itemName, 0, index);
+    			GridPane.setMargin(itemName, new Insets(5, 5, 5, 5));
+    			myGridPane.getChildren().add(itemName);
+    			Label itemCost = new Label(String.format("%.2f", -1 * myTransaction.items.get(i).getPrice()));
+    			GridPane.setConstraints(itemCost, 1, index);
+    			GridPane.setMargin(itemCost, new Insets(5, 5, 5, 5));
+    			myGridPane.getChildren().add(itemCost);
+    			Label itemID = new Label(myTransaction.items.get(i).getId());
+    			GridPane.setConstraints(itemID, 2, index);
+    			GridPane.setMargin(itemID, new Insets(5, 5, 5, 5));
+    			myGridPane.getChildren().add(itemID);
+
+    			EventHandler<ActionEvent> action = removeItemItemReturn(i);
+    			Button removeItem = new Button("Remove Item");
+    			removeItem.setOnAction(action);
+    			GridPane.setConstraints(removeItem, 3, index++);
+    			GridPane.setMargin(removeItem, new Insets(5, 5, 5, 5));
+    			myGridPane.getChildren().add(removeItem);
+    			removeItemButtons.add(removeItem);
+    		}
+
+    		Label transactionTotalTitle = new Label("total cost = ");
+    		transactionTotalTitle.setStyle("-fx-font-weight: bold");
+    		GridPane.setConstraints(transactionTotalTitle, 0, index);
+    		GridPane.setMargin(transactionTotalTitle, new Insets(5, 5, 5, 5));
+    		myGridPane.getChildren().add(transactionTotalTitle);
+
+    		double transactionTotalPrice = 0;
+
+    		for (Item item : myTransaction.items)
+    		{
+    			transactionTotalPrice += item.getPrice();
+    		}
+
+    		Label transactionTotalValue = new Label(String.format("%.2f", -1 * transactionTotalPrice));
+    		transactionTotalValue.setStyle("-fx-font-weight: bold");
+    		GridPane.setConstraints(transactionTotalValue, 1, index++);
+    		GridPane.setMargin(transactionTotalValue, new Insets(5, 5, 5, 5));
+    		myGridPane.getChildren().add(transactionTotalValue);
+
+    		//complete transaction
+    		Button completeItemReturnButton = new Button("Complete Item Return");
+    		completeItemReturnButton.setOnAction(e ->
+    		{
+//    			newTransactionButton.setDisable(false);
+//    			itemReturnButton.setDisable(false);
+    			for (Item item : myTransaction.items)
+				{
+					Inventory.buyItem(item);
+				}
+    			enableRegisterButtons();
+    			mainLayout.setRight(null);
+    	        stage.sizeToScene();
+    		});
+            GridPane.setConstraints(completeItemReturnButton, 0, index);
+            GridPane.setMargin(completeItemReturnButton, new Insets(5, 5, 5, 5));
+            myGridPane.getChildren().add(completeItemReturnButton);
+
+            //cancel transaction
+            Button cancelItemReturnButton = new Button("Cancel Item Return");
+            cancelItemReturnButton.setOnAction(e ->
+            {
+//            	newTransactionButton.setDisable(false);
+//            	itemReturnButton.setDisable(false);
+            	enableRegisterButtons();
+            	mainLayout.setRight(null);
+                stage.sizeToScene();
+            });
+            GridPane.setConstraints(cancelItemReturnButton, 1, index++);
+            GridPane.setMargin(cancelItemReturnButton, new Insets(5, 5, 5, 5));
+            myGridPane.getChildren().add(cancelItemReturnButton);
+
+    		myGridPane.setStyle("-fx-border-color: black");
+    	}
+
+    	return myGridPane;
     }
 
     @Override
     protected VBox createTopPane()
 	{
-		Menu menu0 = new Menu("File");
-
-		MenuItem menuItem = new MenuItem("Exit");
-		menuItem.setOnAction(e -> closeWindow());
-		menu0.getItems().add(menuItem);
-
-		MenuBar menuBar = new MenuBar();
-
-		menuBar.getMenus().addAll(menu0);
-
-		VBox myVBox = new VBox();
-		myVBox.setPadding(new Insets(0, 0, 0, 0));
-
-		myVBox.getChildren().addAll(menuBar);
-
-		return myVBox;
+//		Menu menu0 = new Menu("File");
+//
+//		MenuItem menuItem = new MenuItem("Exit");
+//		menuItem.setOnAction(e -> closeWindow());
+//		menu0.getItems().add(menuItem);
+//
+//		MenuBar menuBar = new MenuBar();
+//
+//		menuBar.getMenus().addAll(menu0);
+//
+//		VBox myVBox = new VBox();
+//		myVBox.setPadding(new Insets(0, 0, 0, 0));
+//
+//		myVBox.getChildren().addAll(menuBar);
+//
+//		return myVBox;
+    	return null;
 	}
 
     @Override
@@ -351,7 +621,7 @@ public class RegisterWindow extends BaseWindow
         //id
         Label registerIDtitle = new Label("Register ID:");
         registerIDtitle.setStyle("-fx-font-weight: bold");
-        Label registerIDvalue = new Label("97whghb4");
+        Label registerIDvalue = new Label(thisRegister.getId());
         GridPane.setConstraints(registerIDtitle, 0, index++);
         GridPane.setMargin(registerIDtitle, new Insets(5, 5, 0, 5));
         myGridPane.getChildren().add(registerIDtitle);
@@ -362,7 +632,7 @@ public class RegisterWindow extends BaseWindow
         //model
         Label registerModelTitle = new Label("Register Model:");
         registerModelTitle.setStyle("-fx-font-weight: bold");
-        Label registerModelValue = new Label("apsib8");
+        Label registerModelValue = new Label(thisRegister.getModel());
         GridPane.setConstraints(registerModelTitle, 0, index++);
         GridPane.setMargin(registerModelTitle, new Insets(5, 5, 0, 5));
         myGridPane.getChildren().add(registerModelTitle);
@@ -373,13 +643,35 @@ public class RegisterWindow extends BaseWindow
         //vendor
         Label registerVendorTitle = new Label("Register Vendor:");
         registerVendorTitle.setStyle("-fx-font-weight: bold");
-        Label registerVendorValue = new Label("Acme Registers");
+        Label registerVendorValue = new Label(thisRegister.getVendor());
         GridPane.setConstraints(registerVendorTitle, 0, index++);
         GridPane.setMargin(registerVendorTitle, new Insets(5, 5, 0, 5));
         myGridPane.getChildren().add(registerVendorTitle);
         GridPane.setConstraints(registerVendorValue, 0, index++);
         GridPane.setMargin(registerVendorValue, new Insets(0, 5, 5, 5));
         myGridPane.getChildren().add(registerVendorValue);
+
+        //cashier name
+        Label cashierNameTitle = new Label("Cashier Name:");
+        cashierNameTitle.setStyle("-fx-font-weight: bold");
+        Label cashierNamevalue = new Label(thisCashier.getName());
+        GridPane.setConstraints(cashierNameTitle, 0, index++);
+        GridPane.setMargin(cashierNameTitle, new Insets(5, 5, 0, 5));
+        myGridPane.getChildren().add(cashierNameTitle);
+        GridPane.setConstraints(cashierNamevalue, 0, index++);
+        GridPane.setMargin(cashierNamevalue, new Insets(0, 5, 5, 5));
+        myGridPane.getChildren().add(cashierNamevalue);
+
+        //cashier id
+        Label cashierIDTitle = new Label("Cashier ID:");
+        cashierIDTitle.setStyle("-fx-font-weight: bold");
+        Label cashierIDvalue = new Label(thisCashier.getId());
+        GridPane.setConstraints(cashierIDTitle, 0, index++);
+        GridPane.setMargin(cashierIDTitle, new Insets(5, 5, 0, 5));
+        myGridPane.getChildren().add(cashierIDTitle);
+        GridPane.setConstraints(cashierIDvalue, 0, index++);
+        GridPane.setMargin(cashierIDvalue, new Insets(0, 5, 5, 5));
+        myGridPane.getChildren().add(cashierIDvalue);
 
         myGridPane.setStyle("-fx-border-color: black");
 
@@ -396,10 +688,13 @@ public class RegisterWindow extends BaseWindow
         cashierLoginButton = new Button("Cashier Login");
         cashierLoginButton.setOnAction(e ->
         {
-        	CashierCheck adminCheck = new CashierCheck();
+        	CashierCheck userCheck = new CashierCheck();
 
-    		if ((Boolean)adminCheck.buildStage(true))
+        	thisCashier = (Cashier)userCheck.buildStage(true);
+
+    		if (thisCashier != null)
     		{
+    			mainLayout.setLeft(createLeftPane());
     			enableRegisterButtons();
     			loginCashier();
     		}
@@ -411,17 +706,20 @@ public class RegisterWindow extends BaseWindow
         cashierLogoutButton = new Button("Cashier Logout");
         cashierLogoutButton.setOnAction(e ->
         {
+        	thisCashier = new Cashier();
+        	mainLayout.setLeft(createLeftPane());
         	disableRegisterButtons();
+        	closeRegisterButton.setDisable(false);
         	logoutCashier();
         });
         GridPane.setConstraints(cashierLogoutButton, 0, index++);
         GridPane.setMargin(cashierLogoutButton, new Insets(5, 5, 5, 5));
         myGridPane.getChildren().add(cashierLogoutButton);
 
-        printReportButton = new Button("Print Report");
-        GridPane.setConstraints(printReportButton, 0, index++);
-        GridPane.setMargin(printReportButton, new Insets(5, 5, 5, 5));
-        myGridPane.getChildren().add(printReportButton);
+//        printReportButton = new Button("Print Report");
+//        GridPane.setConstraints(printReportButton, 0, index++);
+//        GridPane.setMargin(printReportButton, new Insets(5, 5, 5, 5));
+//        myGridPane.getChildren().add(printReportButton);
 
         closeRegisterButton = new Button("Close Register");
         closeRegisterButton.setOnAction(e ->
@@ -435,6 +733,7 @@ public class RegisterWindow extends BaseWindow
         newTransactionButton = new Button("New Transaction");
         newTransactionButton.setOnAction(e ->
         {
+        	myTransaction = null;
         	mainLayout.setRight(createTransaction());
             stage.sizeToScene();
         });
@@ -445,7 +744,7 @@ public class RegisterWindow extends BaseWindow
         itemReturnButton = new Button("Item Return");
         itemReturnButton.setOnAction(e ->
         {
-        	mainLayout.setRight(itemReturn());
+        	mainLayout.setRight(itemReturn(null));
             stage.sizeToScene();
         });
         GridPane.setConstraints(itemReturnButton, 0, index++);
@@ -454,6 +753,7 @@ public class RegisterWindow extends BaseWindow
 
         disableRegisterButtons();
         cashierLoginButton.setDisable(false);
+        closeRegisterButton.setDisable(false);
 
         return myGridPane;
 	}
