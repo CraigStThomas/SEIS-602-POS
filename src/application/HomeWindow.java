@@ -47,32 +47,10 @@ public class HomeWindow extends BaseWindow
 	}
 
 	@Override
-	protected VBox createTopPane()
-	{
-//		Menu menu0 = new Menu("File");
-//
-//		MenuItem menuItem = new MenuItem("Exit");
-//		menuItem.setOnAction(e -> closeWindow());
-//		menu0.getItems().add(menuItem);
-//
-//		MenuBar menuBar = new MenuBar();
-//
-//		menuBar.getMenus().addAll(menu0);
-//
-//		VBox myVBox = new VBox();
-//		myVBox.setPadding(new Insets(0, 0, 0, 0));
-//
-//		myVBox.getChildren().addAll(menuBar);
-//
-//		return myVBox;
-		return null;
-	}
+	protected VBox createTopPane() {return null;}
 
 	@Override
-	protected GridPane createLeftPane()
-	{
-		return null;
-	}
+	protected GridPane createLeftPane() {return null;}
 
 	@Override
 	protected GridPane createCenterPane()
