@@ -1,8 +1,6 @@
 
 package application;
 
-import com.sun.org.apache.xpath.internal.operations.Equals;
-
 public class Item
 {
 

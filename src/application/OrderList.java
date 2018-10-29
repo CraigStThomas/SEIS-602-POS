@@ -24,27 +24,21 @@ public class OrderList
 		productList.add(new Product(new Item("test 2", 2.99, "25h7l"), 10, 4, "supplier 2"));
 		productList.add(new Product(new Item("test 3", 3.99, "35h7l"), 7, 1, "supplier 2"));
 
-		order_list.add(new Order(productList,
-				                 java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()),
-				                 UUID.randomUUID().toString().replace("-", "").substring(0, 10)));
+		order_list.add(new Order(productList));
 
 		productList = new LinkedList<>();
 		productList.add(new Product(new Item("test 1", 1.99, "15h7l"), 6, 3, "supplier 2"));
 		productList.add(new Product(new Item("test 4", 4.99, "45h7l"), 10, 4, "supplier 3"));
 		productList.add(new Product(new Item("test 5", 5.99, "55h7l"), 7, 1, "supplier 3"));
 
-		order_list.add(new Order(productList,
-                java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()),
-                UUID.randomUUID().toString().replace("-", "").substring(0, 10)));
+		order_list.add(new Order(productList));
 
 		productList = new LinkedList<>();
 		productList.add(new Product(new Item("test 1", 1.99, "15h7l"), 6, 3, "supplier 1"));
 		productList.add(new Product(new Item("test 7", 7.99, "75h7l"), 10, 4, "supplier 4"));
 		productList.add(new Product(new Item("test 8", 8.99, "85h7l"), 7, 1, "supplier 4"));
 
-		order_list.add(new Order(productList,
-                java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()),
-                UUID.randomUUID().toString().replace("-", "").substring(0, 10)));
+		order_list.add(new Order(productList));
 	}
 
 	public void addtoList(Order order)

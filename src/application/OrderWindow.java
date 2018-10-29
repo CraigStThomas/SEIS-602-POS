@@ -1,17 +1,27 @@
 package application;
 
+import java.util.Calendar;
+import org.omg.CORBA.SetOverrideTypeHelper;
 import com.sun.corba.se.impl.resolver.ORBDefaultInitRefResolverImpl;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 public class OrderWindow extends BaseWindow
 {
 	Order order;
+	TextField newOrderItemName;
+	TextField newOrderItemCost;
+	TextField newOrderItemID;
+	TextField newOrderItemQuantity;
+	TextField newOrderItemThreshold;
+	TextField newOrderItemSupplier;
 
 	public OrderWindow(Order inputOrder)
 	{
@@ -19,6 +29,15 @@ public class OrderWindow extends BaseWindow
 
 		order = inputOrder;
 		buildStage(false);
+	}
+
+	private void addItemToOrder()
+	{
+		Item tempItem = new Item(newOrderItemName.getText(), Double.parseDouble(newOrderItemCost.getText()), newOrderItemID.getText());
+		Product tempProduct = new Product(tempItem, Integer.parseInt(newOrderItemQuantity.getText()), Integer.parseInt(newOrderItemThreshold.getText()), newOrderItemSupplier.getText());
+		order.addProduct(tempProduct);
+		mainLayout.setCenter(createCenterPane());
+		stage.sizeToScene();
 	}
 
 	@Override
@@ -31,14 +50,19 @@ public class OrderWindow extends BaseWindow
 
 		Label orderIDvalue = new Label(order.getId());
 
-		Label orderDateLabel = new Label("Order Date:");
-		orderDateLabel.setStyle("-fx-font-weight: bold");
+		Label orderDateCreatedLabel = new Label("Order Date Created:");
+		orderDateCreatedLabel.setStyle("-fx-font-weight: bold");
 
-		Label orderDateValue = new Label(order.getDate());
+		Label orderDateCreatedValue = new Label(order.getDateCreated());
+
+		Label orderDateReceivedLabel = new Label("Order Date Received:");
+		orderDateReceivedLabel.setStyle("-fx-font-weight: bold");
+
+		Label orderDateReceivedValue = new Label(order.getDateReceived());
 
 		myVBox.setPadding(new Insets(5, 5, 5, 5));
 
-		myVBox.getChildren().addAll(orderIDlabel, orderIDvalue, orderDateLabel, orderDateValue);
+		myVBox.getChildren().addAll(orderIDlabel, orderIDvalue, orderDateCreatedLabel, orderDateCreatedValue, orderDateReceivedLabel, orderDateReceivedValue);
 
 		return myVBox;
 	}
@@ -53,28 +77,6 @@ public class OrderWindow extends BaseWindow
 
 		int verticalIndex = 0;
 		int horizontalIndex = 0;
-
-//		Label orderIDlabel = new Label("Order ID:");
-//		orderIDlabel.setStyle("-fx-font-weight: bold");
-//		GridPane.setConstraints(orderIDlabel, horizontalIndex, verticalIndex++);
-//		GridPane.setMargin(orderIDlabel, new Insets(5, 5, 5, 5));
-//		myGridPane.getChildren().add(orderIDlabel);
-//
-//		Label orderIDvalue = new Label(order.getId());
-//		GridPane.setConstraints(orderIDvalue, horizontalIndex, verticalIndex++);
-//		GridPane.setMargin(orderIDvalue, new Insets(5, 5, 5, 5));
-//		myGridPane.getChildren().add(orderIDvalue);
-//
-//		Label orderDateLabel = new Label("Order Date:");
-//		orderDateLabel.setStyle("-fx-font-weight: bold");
-//		GridPane.setConstraints(orderDateLabel, horizontalIndex, verticalIndex++);
-//		GridPane.setMargin(orderDateLabel, new Insets(5, 5, 5, 5));
-//		myGridPane.getChildren().add(orderDateLabel);
-//
-//		Label orderDateValue = new Label(order.getDate());
-//		GridPane.setConstraints(orderDateValue, horizontalIndex, verticalIndex++);
-//		GridPane.setMargin(orderDateValue, new Insets(5, 5, 5, 5));
-//		myGridPane.getChildren().add(orderDateValue);
 
 		Label itemNameLabel = new Label("Item Name");
 		itemNameLabel.setStyle("-fx-font-weight: bold");
@@ -151,6 +153,64 @@ public class OrderWindow extends BaseWindow
 
 		if (order.getOrderReceived() == false)
 		{
+
+//			TextField newOrderItemName;
+//			TextField newOrderItemCost;
+//			TextField newOrderItemID;
+//			TextField newOrderItemQuantity;
+//			TextField newOrderItemSupplier;
+
+			horizontalIndex = 0;
+
+			newOrderItemName = new TextField();
+			newOrderItemName.setPromptText("New Item's Name");
+			GridPane.setConstraints(newOrderItemName, horizontalIndex++, verticalIndex);
+			GridPane.setMargin(newOrderItemName, new Insets(5, 5, 5, 5));
+			myGridPane.getChildren().add(newOrderItemName);
+
+			newOrderItemCost = new TextField();
+			newOrderItemCost.setPromptText("New Item's Cost");
+			GridPane.setConstraints(newOrderItemCost, horizontalIndex++, verticalIndex);
+			GridPane.setMargin(newOrderItemCost, new Insets(5, 5, 5, 5));
+			myGridPane.getChildren().add(newOrderItemCost);
+
+			newOrderItemID = new TextField();
+			newOrderItemID.setPromptText("New Item's ID");
+			GridPane.setConstraints(newOrderItemID, horizontalIndex++, verticalIndex);
+			GridPane.setMargin(newOrderItemID, new Insets(5, 5, 5, 5));
+			myGridPane.getChildren().add(newOrderItemID);
+
+			newOrderItemQuantity = new TextField();
+			newOrderItemQuantity.setPromptText("New Item's Quantity");
+			GridPane.setConstraints(newOrderItemQuantity, horizontalIndex++, verticalIndex);
+			GridPane.setMargin(newOrderItemQuantity, new Insets(5, 5, 5, 5));
+			myGridPane.getChildren().add(newOrderItemQuantity);
+
+			newOrderItemThreshold = new TextField();
+			newOrderItemThreshold.setPromptText("New Item's Threshold");
+			GridPane.setConstraints(newOrderItemThreshold, horizontalIndex++, verticalIndex);
+			GridPane.setMargin(newOrderItemThreshold, new Insets(5, 5, 5, 5));
+			myGridPane.getChildren().add(newOrderItemThreshold);
+
+			newOrderItemSupplier = new TextField();
+			newOrderItemSupplier.setPromptText("New Item's Supplier");
+			GridPane.setConstraints(newOrderItemSupplier, horizontalIndex++, verticalIndex);
+			GridPane.setMargin(newOrderItemSupplier, new Insets(5, 5, 5, 5));
+			myGridPane.getChildren().add(newOrderItemSupplier);
+
+			Button addItemButton = new Button("Add Item");
+			addItemButton.setOnAction(e ->
+			{
+				addItemToOrder();
+			});
+			GridPane.setConstraints(addItemButton, horizontalIndex++, verticalIndex++);
+			GridPane.setMargin(addItemButton, new Insets(5, 5, 5, 5));
+			myGridPane.getChildren().add(addItemButton);
+
+
+
+
+
 			Button receiveOrderButton = new Button("Receive\nOrder");
 			receiveOrderButton.setOnAction(e ->
 			{
@@ -164,6 +224,10 @@ public class OrderWindow extends BaseWindow
 						{
 							createNewProduct = false;
 							Inventory.prod_list.get(j).setQty(Inventory.prod_list.get(j).getQty() + order.getProductList().get(i).getQty());
+							if (order.getProductList().get(i).getThreshold() >= 0)
+							{
+								Inventory.prod_list.get(j).setThreshold(order.getProductList().get(i).getThreshold());
+							}
 							break;
 						}
 					}
@@ -175,6 +239,8 @@ public class OrderWindow extends BaseWindow
 				}
 
 				order.setOrderReceived(true);
+				order.setDateReceived(java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()));
+				mainLayout.setTop(createTopPane());
 				mainLayout.setCenter(createCenterPane());
 				stage.sizeToScene();
 			});

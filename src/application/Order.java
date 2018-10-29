@@ -2,26 +2,32 @@ package application;
 
 import java.util.LinkedList;
 import java.util.ListIterator;
-import java.util.Date;
+import java.util.UUID;
+import java.util.Calendar;
 
 public class Order
 {
 	private LinkedList<Product>	productList;
-	private String				date;
+	private String				dateCreated;
+	private String				dateReceived;
 	private String				id;
 	private boolean				orderReceived;
 
 	public Order()
 	{
 		productList = new LinkedList<>();
+		dateCreated = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+		dateReceived = new String();
+		id = UUID.randomUUID().toString().replace("-", "").substring(0, 10);
 		orderReceived = false;
 	}
 
-	public Order(LinkedList<Product> inputProductList, String inputDate, String inputID)
+	public Order(LinkedList<Product> inputProductList)
 	{
 		productList = inputProductList;
-		date = inputDate;
-		id = inputID;
+		dateCreated = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+		dateReceived = new String();
+		id = UUID.randomUUID().toString().replace("-", "").substring(0, 10);
 		orderReceived = false;
 	}
 
@@ -40,9 +46,24 @@ public class Order
 		return this.id;
 	}
 
-	public String getDate()
+	public String getDateCreated()
 	{
-		return date;
+		return dateCreated;
+	}
+
+	public String getDateReceived()
+	{
+		return dateReceived;
+	}
+
+	public void setDateCreated(String inputDateCreated)
+	{
+		dateCreated = inputDateCreated;
+	}
+
+	public void setDateReceived(String inputDateReceived)
+	{
+		dateReceived = inputDateReceived;
 	}
 
 	public LinkedList<Product> getProductList()
@@ -71,7 +92,7 @@ public class Order
 			order_content += "\n" + listIterator.next();
 		}
 
-		return " Order created on: " + date.toString() + ", Order Id: " + this.id + order_content;
+		return " Order created on: " + dateCreated.toString() + ", Order Id: " + this.id + order_content;
 
 	}
 }

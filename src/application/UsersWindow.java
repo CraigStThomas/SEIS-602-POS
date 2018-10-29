@@ -16,7 +16,7 @@ import javafx.scene.text.FontPosture;
 
 public class UsersWindow extends BaseWindow
 {
-	LinkedList<Button> removeUserButtons;
+//	LinkedList<Button> removeUserButtons;
 	TextField newUserName;
 	TextField newUserID;
 	TextField newUserUsername;
@@ -30,24 +30,18 @@ public class UsersWindow extends BaseWindow
 		stage.setTitle("Users");
 	}
 
-	private EventHandler<ActionEvent> addUser()
+	private void addUser()
     {
-        return new EventHandler<ActionEvent>()
-        {
-            public void handle(ActionEvent event)
-            {
-            	if ((newUserName != null) && (!newUserName.getText().equals("")) &&
-            	    (newUserID != null) && (!newUserID.getText().equals("")) &&
-            	    (newUserUsername != null) && (!newUserUsername.getText().equals("")) &&
-            	    (newUserPassword != null) && (!newUserPassword.getText().equals("")))
-            	{
+		if ((newUserName != null) && (!newUserName.getText().equals("")) &&
+        	    (newUserID != null) && (!newUserID.getText().equals("")) &&
+        	    (newUserUsername != null) && (!newUserUsername.getText().equals("")) &&
+        	    (newUserPassword != null) && (!newUserPassword.getText().equals("")))
+    	{
 
-                	UsersList.user.add(new User(newUserName.getText(), newUserUsername.getText(), newUserPassword.getText(), newUserID.getText()));
-                	mainLayout.setCenter(createCenterPane());
-                	stage.sizeToScene();
-            	}
-            }
-        };
+        	UsersList.user.add(new User(newUserName.getText(), newUserUsername.getText(), newUserPassword.getText(), newUserID.getText()));
+        	mainLayout.setCenter(createCenterPane());
+        	stage.sizeToScene();
+    	}
     }
 
 	private EventHandler<ActionEvent> removeUser(int userIndex)
@@ -128,7 +122,7 @@ public class UsersWindow extends BaseWindow
 		myGridPane.getChildren().add(passwordLabel);
 		// end of admin user
 
-		removeUserButtons = new LinkedList<>();
+//		removeUserButtons = new LinkedList<>();
 		EventHandler<ActionEvent> action;
 
 		for (int i = 0; i < UsersList.user.size(); i++)
@@ -162,39 +156,41 @@ public class UsersWindow extends BaseWindow
 			GridPane.setConstraints(removeUser, horizontalIndex++, verticalIndex);
 			GridPane.setMargin(removeUser, new Insets(5, 5, 5, 5));
 			myGridPane.getChildren().add(removeUser);
-			removeUserButtons.add(removeUser);
+//			removeUserButtons.add(removeUser);
 		}
 
 		horizontalIndex = 0;
 		verticalIndex++;
 
 		newUserName = new TextField();
-		newUserName.setPromptText("new user's Name");
+		newUserName.setPromptText("New User's Name");
 		GridPane.setConstraints(newUserName, horizontalIndex++, verticalIndex);
 		GridPane.setMargin(newUserName, new Insets(5, 5, 5, 5));
 		myGridPane.getChildren().add(newUserName);
 
 		newUserID = new TextField();
-		newUserID.setPromptText("new user's ID");
+		newUserID.setPromptText("New User's ID");
 		GridPane.setConstraints(newUserID, horizontalIndex++, verticalIndex);
 		GridPane.setMargin(newUserID, new Insets(5, 5, 5, 5));
 		myGridPane.getChildren().add(newUserID);
 
 		newUserUsername = new TextField();
-		newUserUsername.setPromptText("new user's Username");
+		newUserUsername.setPromptText("New User's Username");
 		GridPane.setConstraints(newUserUsername, horizontalIndex++, verticalIndex);
 		GridPane.setMargin(newUserUsername, new Insets(5, 5, 5, 5));
 		myGridPane.getChildren().add(newUserUsername);
 
 		newUserPassword = new PasswordField();
-		newUserPassword.setPromptText("new user's Username");
+		newUserPassword.setPromptText("New User's Password");
 		GridPane.setConstraints(newUserPassword, horizontalIndex++, verticalIndex);
 		GridPane.setMargin(newUserPassword, new Insets(5, 5, 5, 5));
 		myGridPane.getChildren().add(newUserPassword);
 
-		action = addUser();
 		Button addUserButton = new Button("Add User");
-		addUserButton.setOnAction(action);
+		addUserButton.setOnAction(e ->
+		{
+			addUser();
+		});
 		GridPane.setConstraints(addUserButton, horizontalIndex++, verticalIndex);
 		GridPane.setMargin(addUserButton, new Insets(5, 5, 5, 5));
 		myGridPane.getChildren().add(addUserButton);

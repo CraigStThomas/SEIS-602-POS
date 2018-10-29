@@ -26,6 +26,10 @@ public class Inventory
 
 	public static void addProduct(Product prod)
 	{
+		if (prod.getThreshold() < 0)
+		{
+			prod.setThreshold(0);
+		}
 		prod_list.add(prod);
 	}
 
@@ -53,6 +57,13 @@ public class Inventory
 			if ((product.getItem() == item) && (product.getQty() > 0))
 			{
 				product.setQty(product.getQty() - 1);
+
+				if (product.getQty() < product.getThreshold())
+				{
+					LinkedList<Product> tempProductList = new LinkedList<>();
+					tempProductList.add(new Product(product.getItem(), 10, 0, product.getSupplier()));
+					OrderList.order_list.add(new Order(tempProductList));
+				}
 			}
 		}
 	}

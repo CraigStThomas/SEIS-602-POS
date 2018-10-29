@@ -49,11 +49,17 @@ public class OrderListWindow extends BaseWindow
 		GridPane.setMargin(orderIDlabel, new Insets(5, 5, 5, 5));
 		myGridPane.getChildren().add(orderIDlabel);
 
-		Label orderDateLabel = new Label("Order Date");
-		orderDateLabel.setStyle("-fx-font-weight: bold");
-		GridPane.setConstraints(orderDateLabel, horizontalIndex++, verticalIndex++);
-		GridPane.setMargin(orderDateLabel, new Insets(5, 5, 5, 5));
-		myGridPane.getChildren().add(orderDateLabel);
+		Label orderDateCreatedLabel = new Label("Order Date Created");
+		orderDateCreatedLabel.setStyle("-fx-font-weight: bold");
+		GridPane.setConstraints(orderDateCreatedLabel, horizontalIndex++, verticalIndex);
+		GridPane.setMargin(orderDateCreatedLabel, new Insets(5, 5, 5, 5));
+		myGridPane.getChildren().add(orderDateCreatedLabel);
+
+		Label orderDateReceivedLabel = new Label("Order Date Received");
+		orderDateReceivedLabel.setStyle("-fx-font-weight: bold");
+		GridPane.setConstraints(orderDateReceivedLabel, horizontalIndex++, verticalIndex++);
+		GridPane.setMargin(orderDateReceivedLabel, new Insets(5, 5, 5, 5));
+		myGridPane.getChildren().add(orderDateReceivedLabel);
 
 		for(int i = 0; i < OrderList.order_list.size(); i++)
 		{
@@ -64,10 +70,15 @@ public class OrderListWindow extends BaseWindow
     		GridPane.setMargin(orderID, new Insets(5, 5, 5, 5));
     		myGridPane.getChildren().add(orderID);
 
-    		Label orderDate = new Label(OrderList.order_list.get(i).getDate());
-    		GridPane.setConstraints(orderDate, horizontalIndex++, verticalIndex);
-    		GridPane.setMargin(orderDate, new Insets(5, 5, 5, 5));
-    		myGridPane.getChildren().add(orderDate);
+    		Label orderDateCreated = new Label(OrderList.order_list.get(i).getDateCreated());
+    		GridPane.setConstraints(orderDateCreated, horizontalIndex++, verticalIndex);
+    		GridPane.setMargin(orderDateCreated, new Insets(5, 5, 5, 5));
+    		myGridPane.getChildren().add(orderDateCreated);
+
+    		Label orderDateReceived = new Label(OrderList.order_list.get(i).getDateReceived());
+    		GridPane.setConstraints(orderDateReceived, horizontalIndex++, verticalIndex);
+    		GridPane.setMargin(orderDateReceived, new Insets(5, 5, 5, 5));
+    		myGridPane.getChildren().add(orderDateReceived);
 
     		EventHandler<ActionEvent> action = openOrderWindow(i);
     		Button orderButton = new Button("Open");
@@ -76,6 +87,27 @@ public class OrderListWindow extends BaseWindow
     		GridPane.setMargin(orderButton, new Insets(5, 5, 5, 5));
     		myGridPane.getChildren().add(orderButton);
 		}
+
+		Button newOrderButton = new Button("New Order");
+		newOrderButton.setOnAction(e ->
+		{
+			OrderList.order_list.add(new Order());
+			mainLayout.setCenter(createCenterPane());
+			stage.sizeToScene();
+		});
+		GridPane.setConstraints(newOrderButton, 0, verticalIndex++);
+		GridPane.setMargin(newOrderButton, new Insets(5, 5, 5, 5));
+		myGridPane.getChildren().add(newOrderButton);
+
+		Button refreshButton = new Button("Refresh\nOrders");
+		refreshButton.setOnAction(e ->
+		{
+			mainLayout.setCenter(createCenterPane());
+			stage.sizeToScene();
+		});
+		GridPane.setConstraints(refreshButton, 0, verticalIndex++);
+		GridPane.setMargin(refreshButton, new Insets(5, 5, 5, 5));
+		myGridPane.getChildren().add(refreshButton);
 
 		return myGridPane;
 	}

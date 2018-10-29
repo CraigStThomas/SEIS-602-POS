@@ -35,6 +35,20 @@ public class InventoryWindow extends BaseWindow
 //		stage.setTitle("Inventory");
 	}
 
+	private EventHandler<ActionEvent> removeProduct(int productIndex)
+    {
+        return new EventHandler<ActionEvent>()
+        {
+            public void handle(ActionEvent event)
+            {
+//            	UsersList.user.remove(userIndex);
+            	Inventory.prod_list.remove(productIndex);
+            	mainLayout.setCenter(createCenterPane());
+            	stage.sizeToScene();
+            }
+        };
+    }
+
 	private EventHandler<ActionEvent> pickMe()
     {
         return new EventHandler<ActionEvent>()
@@ -149,6 +163,15 @@ public class InventoryWindow extends BaseWindow
 				{
 					itemButton.setDisable(true);
 				}
+			}
+			else
+			{
+				EventHandler<ActionEvent> action = removeProduct(i);
+				Button removeProductButton = new Button("Remove Product");
+				removeProductButton.setOnAction(action);
+				GridPane.setConstraints(removeProductButton, horizontalIndex++, verticalIndex);
+				GridPane.setMargin(removeProductButton, new Insets(5, 5, 5, 5));
+				myGridPane.getChildren().add(removeProductButton);
 			}
 
 			verticalIndex++;
