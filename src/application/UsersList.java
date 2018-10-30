@@ -10,6 +10,11 @@ public class UsersList
 
 	public UsersList()
 	{
+		user = new LinkedList<>();
+	}
+
+	public UsersList(int test)
+	{
 		admin = new User("admin", "admin", "admin", "0");
 
 		user = new LinkedList<>();

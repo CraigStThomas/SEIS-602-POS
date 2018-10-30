@@ -1,11 +1,14 @@
 
 package application;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
-public class Inventory
+public class Inventory implements Serializable
 {
+	private static final long serialVersionUID = 111L;	//serializable wants this
+
 	public static LinkedList<Product> prod_list;
 
 	public Inventory()

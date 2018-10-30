@@ -3,7 +3,6 @@ package application;
 
 public class Item
 {
-
 	private String	name;
 	private double	price;
 	private String	id;
