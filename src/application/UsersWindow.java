@@ -17,15 +17,16 @@ import javafx.scene.text.FontPosture;
 public class UsersWindow extends BaseWindow
 {
 //	LinkedList<Button> removeUserButtons;
+	UsersList usersList;
 	TextField newUserName;
 	TextField newUserID;
 	TextField newUserUsername;
 	PasswordField newUserPassword;
 
-	public UsersWindow()
+	public UsersWindow(UsersList inputUserList)
 	{
 		super(false);
-
+		usersList = inputUserList;
 		buildStage(false);
 		stage.setTitle("Users");
 	}
@@ -38,7 +39,7 @@ public class UsersWindow extends BaseWindow
         	    (newUserPassword != null) && (!newUserPassword.getText().equals("")))
     	{
 
-        	UsersList.user.add(new User(newUserName.getText(), newUserUsername.getText(), newUserPassword.getText(), newUserID.getText()));
+        	usersList.user.add(new User(newUserName.getText(), newUserUsername.getText(), newUserPassword.getText(), newUserID.getText()));
         	mainLayout.setCenter(createCenterPane());
         	stage.sizeToScene();
     	}
@@ -50,7 +51,7 @@ public class UsersWindow extends BaseWindow
         {
             public void handle(ActionEvent event)
             {
-            	UsersList.user.remove(userIndex);
+            	usersList.user.remove(userIndex);
             	mainLayout.setCenter(createCenterPane());
             	stage.sizeToScene();
             }
@@ -97,19 +98,19 @@ public class UsersWindow extends BaseWindow
 		//admin user
 		verticalIndex++;
 		horizontalIndex = 0;
-		nameLabel = new Label(UsersList.admin.name);
+		nameLabel = new Label(usersList.admin.name);
 		nameLabel.setFont(Font.font("Verdana", FontPosture.ITALIC, 12));
 		GridPane.setConstraints(nameLabel, horizontalIndex++, verticalIndex);
 		GridPane.setMargin(nameLabel, new Insets(5, 5, 5, 5));
 		myGridPane.getChildren().add(nameLabel);
 
-		idLabel = new Label(UsersList.admin.id);
+		idLabel = new Label(usersList.admin.id);
 		idLabel.setFont(Font.font("Verdana", FontPosture.ITALIC, 12));
 		GridPane.setConstraints(idLabel, horizontalIndex++, verticalIndex);
 		GridPane.setMargin(idLabel, new Insets(5, 5, 5, 5));
 		myGridPane.getChildren().add(idLabel);
 
-		usernameLabel = new Label(UsersList.admin.username);
+		usernameLabel = new Label(usersList.admin.username);
 		usernameLabel.setFont(Font.font("Verdana", FontPosture.ITALIC, 12));
 		GridPane.setConstraints(usernameLabel, horizontalIndex++, verticalIndex);
 		GridPane.setMargin(usernameLabel, new Insets(5, 5, 5, 5));
@@ -125,22 +126,22 @@ public class UsersWindow extends BaseWindow
 //		removeUserButtons = new LinkedList<>();
 		EventHandler<ActionEvent> action;
 
-		for (int i = 0; i < UsersList.user.size(); i++)
+		for (int i = 0; i < usersList.user.size(); i++)
 		{
 			horizontalIndex = 0;
 			verticalIndex++;
 
-			nameLabel = new Label(UsersList.user.get(i).name);
+			nameLabel = new Label(usersList.user.get(i).name);
 			GridPane.setConstraints(nameLabel, horizontalIndex++, verticalIndex);
 			GridPane.setMargin(nameLabel, new Insets(5, 5, 5, 5));
 			myGridPane.getChildren().add(nameLabel);
 
-			idLabel = new Label(UsersList.user.get(i).id);
+			idLabel = new Label(usersList.user.get(i).id);
 			GridPane.setConstraints(idLabel, horizontalIndex++, verticalIndex);
 			GridPane.setMargin(idLabel, new Insets(5, 5, 5, 5));
 			myGridPane.getChildren().add(idLabel);
 
-			usernameLabel = new Label(UsersList.user.get(i).username);
+			usernameLabel = new Label(usersList.user.get(i).username);
 			GridPane.setConstraints(usernameLabel, horizontalIndex++, verticalIndex);
 			GridPane.setMargin(usernameLabel, new Insets(5, 5, 5, 5));
 			myGridPane.getChildren().add(usernameLabel);

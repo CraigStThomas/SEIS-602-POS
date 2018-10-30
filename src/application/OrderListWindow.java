@@ -12,10 +12,15 @@ import sun.awt.image.ImageWatched.Link;
 
 public class OrderListWindow extends BaseWindow
 {
-	public OrderListWindow()
-	{
-		super();
+	Inventory inventory;
+	OrderList orderList;
 
+	public OrderListWindow(Inventory inputInventory, OrderList inputOrderList)
+	{
+		super(false);
+		inventory = inputInventory;
+		orderList = inputOrderList;
+		buildStage(false);
 		stage.setTitle("Orders");
 	}
 
@@ -25,7 +30,7 @@ public class OrderListWindow extends BaseWindow
         {
             public void handle(ActionEvent event)
             {
-            	OrderWindow orderWindow = new OrderWindow(OrderList.order_list.get(index));
+            	OrderWindow orderWindow = new OrderWindow(orderList.order_list.get(index), inventory);
             }
         };
     }
@@ -61,21 +66,21 @@ public class OrderListWindow extends BaseWindow
 		GridPane.setMargin(orderDateReceivedLabel, new Insets(5, 5, 5, 5));
 		myGridPane.getChildren().add(orderDateReceivedLabel);
 
-		for(int i = 0; i < OrderList.order_list.size(); i++)
+		for(int i = 0; i < orderList.order_list.size(); i++)
 		{
 			horizontalIndex = 0;
 
-			Label orderID = new Label(OrderList.order_list.get(i).getId());
+			Label orderID = new Label(orderList.order_list.get(i).getId());
     		GridPane.setConstraints(orderID, horizontalIndex++, verticalIndex);
     		GridPane.setMargin(orderID, new Insets(5, 5, 5, 5));
     		myGridPane.getChildren().add(orderID);
 
-    		Label orderDateCreated = new Label(OrderList.order_list.get(i).getDateCreated());
+    		Label orderDateCreated = new Label(orderList.order_list.get(i).getDateCreated());
     		GridPane.setConstraints(orderDateCreated, horizontalIndex++, verticalIndex);
     		GridPane.setMargin(orderDateCreated, new Insets(5, 5, 5, 5));
     		myGridPane.getChildren().add(orderDateCreated);
 
-    		Label orderDateReceived = new Label(OrderList.order_list.get(i).getDateReceived());
+    		Label orderDateReceived = new Label(orderList.order_list.get(i).getDateReceived());
     		GridPane.setConstraints(orderDateReceived, horizontalIndex++, verticalIndex);
     		GridPane.setMargin(orderDateReceived, new Insets(5, 5, 5, 5));
     		myGridPane.getChildren().add(orderDateReceived);
@@ -91,7 +96,7 @@ public class OrderListWindow extends BaseWindow
 		Button newOrderButton = new Button("New Order");
 		newOrderButton.setOnAction(e ->
 		{
-			OrderList.order_list.add(new Order());
+			orderList.order_list.add(new Order());
 			mainLayout.setCenter(createCenterPane());
 			stage.sizeToScene();
 		});

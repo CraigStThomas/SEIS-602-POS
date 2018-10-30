@@ -15,6 +15,7 @@ import javafx.scene.layout.VBox;
 
 public class OrderWindow extends BaseWindow
 {
+	Inventory inventory;
 	Order order;
 	TextField newOrderItemName;
 	TextField newOrderItemCost;
@@ -23,10 +24,10 @@ public class OrderWindow extends BaseWindow
 	TextField newOrderItemThreshold;
 	TextField newOrderItemSupplier;
 
-	public OrderWindow(Order inputOrder)
+	public OrderWindow(Order inputOrder, Inventory inputInventory)
 	{
 		super(false);
-
+		inventory = inputInventory;
 		order = inputOrder;
 		buildStage(false);
 	}
@@ -218,15 +219,15 @@ public class OrderWindow extends BaseWindow
 				{
 					boolean createNewProduct = true;
 
-					for (int j = 0; j < Inventory.prod_list.size(); j++)
+					for (int j = 0; j < inventory.prod_list.size(); j++)
 					{
-						if (order.getProductList().get(i).equals(Inventory.prod_list.get(j)))
+						if (order.getProductList().get(i).equals(inventory.prod_list.get(j)))
 						{
 							createNewProduct = false;
-							Inventory.prod_list.get(j).setQty(Inventory.prod_list.get(j).getQty() + order.getProductList().get(i).getQty());
+							inventory.prod_list.get(j).setQty(inventory.prod_list.get(j).getQty() + order.getProductList().get(i).getQty());
 							if (order.getProductList().get(i).getThreshold() >= 0)
 							{
-								Inventory.prod_list.get(j).setThreshold(order.getProductList().get(i).getThreshold());
+								inventory.prod_list.get(j).setThreshold(order.getProductList().get(i).getThreshold());
 							}
 							break;
 						}
@@ -234,7 +235,7 @@ public class OrderWindow extends BaseWindow
 
 					if (createNewProduct)
 					{
-						Inventory.addProduct(order.getProductList().get(i));
+						inventory.addProduct(order.getProductList().get(i));
 					}
 				}
 

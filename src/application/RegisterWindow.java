@@ -28,7 +28,7 @@ public class RegisterWindow extends BaseWindow
 		@Override
 		protected void checkLogin()
 		{
-			Cashier returnCashier = UsersList.validateUserCredentials(usernameInput.getText(), passwordInput.getText());
+			Cashier returnCashier = usersList.validateUserCredentials(usernameInput.getText(), passwordInput.getText());
 			if (returnCashier != null)
 			{
 				answer = returnCashier;
@@ -38,8 +38,12 @@ public class RegisterWindow extends BaseWindow
 	}
 
 //    LinkedList<Item> mySampleItems;
+	UsersList usersList;
+	Inventory inventory;
+	TransactionHistory transactionHistory;
     LinkedList<Button> removeItemButtons;
     Transaction myTransaction;
+    Transaction myTransactionCopy;
     CashierDrawer cashierDrawer;
     Register thisRegister;
 
@@ -111,9 +115,12 @@ public class RegisterWindow extends BaseWindow
     	stage.close();
     }
 
-    public RegisterWindow(Register inputRegister)
+    public RegisterWindow(Register inputRegister, Inventory inputInventory, UsersList inputUserList, TransactionHistory inputTransactionHistory)
     {
     	super(false);
+    	inventory = inputInventory;
+    	usersList = inputUserList;
+    	transactionHistory = inputTransactionHistory;
     	thisCashier = new Cashier();
 		thisRegister = inputRegister;
     	validCashier = false;
@@ -131,7 +138,7 @@ public class RegisterWindow extends BaseWindow
 //                {
 //                    if (event.getSource() == removeItemButtons.get(i))
 //                    {
-            			Inventory.buyItem(myTransaction.items.get(itemIndex));
+            			inventory.buyItem(myTransaction.items.get(itemIndex));
                     	myTransaction.items.remove(itemIndex);
                         mainLayout.setRight(createTransaction());
                         stage.sizeToScene();
@@ -178,11 +185,11 @@ public class RegisterWindow extends BaseWindow
 //                        mySampleItems.add(new Item("sav8h", 2.77,  "crayons"));
 //                        break;
 //                }
-            	InventoryWindow testInventory = new InventoryWindow(true, false);
+            	InventoryWindow testInventory = new InventoryWindow(true, false, inventory);
             	Item thisItem = (Item)testInventory.buildStage(true);
             	if (thisItem != null)
             	{
-	            	Inventory.sellItem(thisItem);
+	            	inventory.sellItem(thisItem);
 	            	myTransaction.items.add(thisItem);
 	                mainLayout.setRight(createTransaction());
 	                stage.sizeToScene();
@@ -342,6 +349,7 @@ public class RegisterWindow extends BaseWindow
 //			newTransactionButton.setDisable(false);
 //			itemReturnButton.setDisable(false);
 			cashierDrawer.transactionList.add(myTransaction);
+			transactionHistory.transactions.add(myTransaction);
 			enableRegisterButtons();
 			mainLayout.setRight(null);
 	        stage.sizeToScene();
@@ -362,7 +370,7 @@ public class RegisterWindow extends BaseWindow
 //        	itemReturnButton.setDisable(false);
         	for (Item item : myTransaction.items)
 			{
-				Inventory.buyItem(item);
+				inventory.buyItem(item);
 			}
         	enableRegisterButtons();
         	mainLayout.setRight(null);
@@ -397,31 +405,53 @@ public class RegisterWindow extends BaseWindow
 	        //transaction id textfield
 			TextField transactionID = new TextField();
 			transactionID.setPromptText("transaction ID");
-			GridPane.setConstraints(transactionIDtitle, horizontalIndex++, verticalIndex);
+			GridPane.setConstraints(transactionIDtitle, horizontalIndex++, verticalIndex++);
 	        GridPane.setMargin(transactionIDtitle, new Insets(5, 5, 5, 5));
 	        myGridPane.getChildren().add(transactionID);
+
+	        horizontalIndex = 0;
 
 	        //transaction id button
 	        Button transactionIDbutton = new Button("OK");
 	        transactionIDbutton.setOnAction(e ->
 	        {
 	        	// get the transaction, repaint this screen
-	        	myTransaction = new Transaction();
-	        	myTransaction.setCashier(new Cashier("some guy", "abcd"));
-	        	myTransaction.setRegister(new Register("112233", "", ""));
-	        	myTransaction.setId("111222333");
-	        	myTransaction.setDate("today");
-	        	for (int i = 0; i < Inventory.prod_list.size() && i < 3; i++)
-	        	{
-		        	myTransaction.items.add(Inventory.prod_list.get(i).getItem());
-	        	}
+//	        	myTransaction = new Transaction();
+//	        	myTransaction.setCashier(new Cashier("some guy", "abcd"));
+//	        	myTransaction.setRegister(new Register("112233", "", ""));
+//	        	myTransaction.setId("111222333");
+//	        	myTransaction.setDate("today");
+//	        	for (int i = 0; i < inventory.prod_list.size() && i < 3; i++)
+//	        	{
+//		        	myTransaction.items.add(inventory.prod_list.get(i).getItem());
+//	        	}
+	        	for (Transaction tempTransaction : transactionHistory.transactions)
+				{
+					if (tempTransaction.getId().equals(transactionID.getText()))
+					{
+						myTransaction = tempTransaction.copy();
+						myTransactionCopy = tempTransaction.copy();
 
-	        	mainLayout.setRight(itemReturn(myTransaction));
-	        	stage.sizeToScene();
+			        	mainLayout.setRight(itemReturn(myTransaction));
+			        	stage.sizeToScene();
+					}
+				}
 	        });
-	        GridPane.setConstraints(transactionIDbutton, horizontalIndex, verticalIndex);
+	        GridPane.setConstraints(transactionIDbutton, horizontalIndex, verticalIndex++);
 	        GridPane.setMargin(transactionIDbutton, new Insets(5, 5, 5, 5));
 	        myGridPane.getChildren().add(transactionIDbutton);
+
+	        //transaction id cancel button
+	        Button transactionIDcancelButton = new Button("Cancel");
+	        transactionIDcancelButton.setOnAction(e ->
+	        {
+	        	enableRegisterButtons();
+            	mainLayout.setRight(null);
+                stage.sizeToScene();
+	        });
+	        GridPane.setConstraints(transactionIDcancelButton, horizontalIndex, verticalIndex);
+	        GridPane.setMargin(transactionIDcancelButton, new Insets(5, 5, 5, 5));
+	        myGridPane.getChildren().add(transactionIDcancelButton);
     	}
     	else
     	{
@@ -557,10 +587,26 @@ public class RegisterWindow extends BaseWindow
     		{
 //    			newTransactionButton.setDisable(false);
 //    			itemReturnButton.setDisable(false);
-    			for (Item item : myTransaction.items)
+    			for (Item item : myTransaction.items)	//return items to inventory
 				{
-					Inventory.buyItem(item);
+					inventory.buyItem(item);
 				}
+
+    			transactionHistory.transactions.remove(myTransactionCopy);	//remove transaction from history
+
+    			for (Item item : myTransaction.items)	//remove items from transaction copy
+				{
+					myTransactionCopy.items.remove(item);
+				}
+
+    			if (myTransactionCopy.items.size() > 0)	//if there are still items in the transaction copy, place the remainder in the transaction history
+    			{
+    				transactionHistory.transactions.add(myTransactionCopy);
+    			}
+
+    			myTransaction.returnTransaction = true;
+    			cashierDrawer.transactionList.add(myTransaction);	//record the return transaction
+
     			enableRegisterButtons();
     			mainLayout.setRight(null);
     	        stage.sizeToScene();

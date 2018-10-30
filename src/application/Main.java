@@ -7,6 +7,11 @@ import javafx.stage.Stage;
 
 public class Main extends Application
 {
+	Inventory inventory;
+	OrderList orderList;
+	UsersList usersList;
+	TransactionHistory transactionHistory;
+
 	private static LinkedList<BaseWindow> applicationWindows = new LinkedList<>();
 	private static boolean loginValid = false;
 	private static String usernameAdmin = "banana";
@@ -41,28 +46,18 @@ public class Main extends Application
 		return applicationWindows;
 	}
 
-	public static void setLoginValid(boolean status)
-	{
-		loginValid = status;
-
-		applicationWindows.get(0).closeWindow();
-		applicationWindows.remove(0);
-		applicationWindows.add(new HomeWindow());
-	}
-
 	@Override
 	public void start(Stage primaryStage)
 	{
-		Inventory inventory = new Inventory(1);
-		OrderList orderList = new OrderList(1);
-		UsersList userList = new UsersList(1);
+		orderList = new OrderList(1);
+		inventory = new Inventory(1, orderList);
+		usersList = new UsersList(1);
+		transactionHistory = new TransactionHistory();
 
-//		FileIO test = new FileIO();
-//		test.testWrite();
-//		test.testRead();
+//		FileIO.test();
 
 
-		applicationWindows.add(new HomeWindow());
+		applicationWindows.add(new HomeWindow(inventory, usersList, orderList, transactionHistory));
 	}
 
 	public static void main(String[] args)

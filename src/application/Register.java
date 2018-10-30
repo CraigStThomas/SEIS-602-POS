@@ -1,8 +1,12 @@
 
 package application;
 
-public class Register
+import java.io.Serializable;
+
+public class Register implements Serializable
 {
+	private static final long serialVersionUID = 101010L;	//serializable wants this
+
 	private String	id;
 	private String	model;
 	private String	vendor;
@@ -17,6 +21,11 @@ public class Register
 		id = inputID;
 		model = inputModel;
 		vendor = inputVendor;
+	}
+
+	public Register copy()
+	{
+		return new Register(new String(id), new String(model), new String(vendor));
 	}
 
 	public String getId()

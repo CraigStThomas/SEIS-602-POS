@@ -3,10 +3,13 @@ package application;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.UUID;
+import java.io.Serializable;
 import java.util.Calendar;
 
-public class Order
+public class Order implements Serializable
 {
+	private static final long serialVersionUID = 777L;	//serializable wants this
+
 	private LinkedList<Product>	productList;
 	private String				dateCreated;
 	private String				dateReceived;

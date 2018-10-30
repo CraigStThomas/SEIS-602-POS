@@ -1,20 +1,41 @@
 
 package application;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
-public class Transaction
+public class Transaction implements Serializable
 {
+	private static final long serialVersionUID = 999L;	//serializable wants this
+
 	private String		transactionID;
-	private Cashier		Cashier;
+	private Cashier		cashier;
 	private Register	register;
 	private String		date;
+	public boolean		returnTransaction = false;
 
 	LinkedList<Item>	items;
 
 	public Transaction()
 	{
 		items = new LinkedList<>();
+	}
+
+	public Transaction copy()
+	{
+		Transaction tempTransaction = new Transaction();
+
+		tempTransaction.transactionID = new String(transactionID);
+		tempTransaction.date = new String(date);
+		tempTransaction.cashier = cashier.copy();
+		tempTransaction.register = register.copy();
+
+		for (Item item : items)
+		{
+			tempTransaction.items.add(item.copy());
+		}
+
+		return tempTransaction;
 	}
 
 	public String getDate()
@@ -36,11 +57,11 @@ public class Transaction
 	}
 	public Cashier getCashier()
 	{
-		return Cashier;
+		return cashier;
 	}
 	public void setCashier(Cashier Cashier)
 	{
-		this.Cashier = Cashier;
+		this.cashier = Cashier;
 	}
 	public Register getRegister()
 	{

@@ -1,8 +1,12 @@
 
 package application;
 
-public class Cashier
+import java.io.Serializable;
+
+public class Cashier implements Serializable
 {
+	private static final long serialVersionUID = 111111L;	//serializable wants this
+
 	protected String name;
 	protected String id;
 
@@ -16,6 +20,11 @@ public class Cashier
 	{
 		name = inputName;
 		id = inputID;
+	}
+
+	public Cashier copy()
+	{
+		return new Cashier(new String(name), new String(id));
 	}
 
 	public String getId()

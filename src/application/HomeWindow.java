@@ -9,6 +9,11 @@ import javafx.scene.text.TextAlignment;
 
 public class HomeWindow extends BaseWindow
 {
+	Inventory inventory;
+	UsersList usersList;
+	OrderList orderList;
+	TransactionHistory transactionHistory;
+
 	private class AdminCheck extends PasswordWindow
 	{
 		public AdminCheck()
@@ -19,7 +24,7 @@ public class HomeWindow extends BaseWindow
 		@Override
 		protected void checkLogin()
 		{
-			if (UsersList.validateAdmin(usernameInput.getText(), passwordInput.getText()))
+			if (usersList.validateAdmin(usernameInput.getText(), passwordInput.getText()))
 			{
 				answer = new Boolean(true);
 				stage.close();
@@ -27,9 +32,14 @@ public class HomeWindow extends BaseWindow
 		}
 	}
 
-	public HomeWindow()
+	public HomeWindow(Inventory inputInventory, UsersList inputUserList, OrderList inputOrderList, TransactionHistory inputTransactionHistory)
 	{
 		super(false);
+
+		inventory = inputInventory;
+		usersList = inputUserList;
+		orderList = inputOrderList;
+		transactionHistory = inputTransactionHistory;
 
 		AdminCheck adminCheck = new AdminCheck();
 
@@ -58,7 +68,7 @@ public class HomeWindow extends BaseWindow
 		Button viewUser = new Button("Users");
 		viewUser.setOnAction(e ->
 		{
-			Main.getApplicationWindows().add(new UsersWindow());
+			Main.getApplicationWindows().add(new UsersWindow(usersList));
 		});
 		GridPane.setConstraints(viewUser, 0, index++);
 		GridPane.setMargin(viewUser, new Insets(5, 5, 5, 5));
@@ -67,7 +77,7 @@ public class HomeWindow extends BaseWindow
 		Button viewOrders = new Button("Orders");
 		viewOrders.setOnAction(e ->
 		{
-			Main.getApplicationWindows().add(new OrderListWindow());
+			Main.getApplicationWindows().add(new OrderListWindow(inventory, orderList));
 		});
 		GridPane.setConstraints(viewOrders, 0, index++);
 		GridPane.setMargin(viewOrders, new Insets(5, 5, 5, 5));
@@ -76,7 +86,7 @@ public class HomeWindow extends BaseWindow
 		Button viewInventory = new Button("Inventory");
 		viewInventory.setOnAction(e ->
 		{
-			Main.getApplicationWindows().add(new InventoryWindow(false, true));
+			Main.getApplicationWindows().add(new InventoryWindow(false, true, inventory));
 		});
 		GridPane.setConstraints(viewInventory, 0, index++);
 		GridPane.setMargin(viewInventory, new Insets(5, 5, 5, 5));
@@ -99,7 +109,7 @@ public class HomeWindow extends BaseWindow
 				myRegister.setModel("B.47A");
 				myRegister.setVendor("Acme Registers");
 				mainLayout.setCenter(createCenterPane());
-				Main.getApplicationWindows().add(new RegisterWindow(myRegister));
+				Main.getApplicationWindows().add(new RegisterWindow(myRegister, inventory, usersList, transactionHistory));
 			}
 		});
 		GridPane.setConstraints(createRegister, 0, index++);

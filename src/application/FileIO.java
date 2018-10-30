@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 public class FileIO
 {
@@ -16,15 +17,58 @@ public class FileIO
 
 	}
 
-	public void testRead()
+	public static void test()
 	{
+
+		TransactionHistory transactionHistory = new TransactionHistory();
+
 		try
 		{
+			FileOutputStream f = new FileOutputStream(new File("myObjects.txt"));
+			ObjectOutputStream o = new ObjectOutputStream(f);
+
+			// Write objects to file
+			o.writeObject(transactionHistory);
+
+			o.close();
+			f.close();
+
 			FileInputStream fi = new FileInputStream(new File("myObjects.txt"));
 			ObjectInputStream oi = new ObjectInputStream(fi);
 
 			// Read objects
-			Item testItem2 = (Item) oi.readObject();
+			TransactionHistory transactionHistory2 = (TransactionHistory) oi.readObject();
+
+			oi.close();
+			fi.close();
+
+		}
+		catch (FileNotFoundException e)
+		{
+			System.out.println("File not found");
+		}
+		catch (IOException e)
+		{
+			System.out.println("Error initializing stream");
+		}
+		catch (ClassNotFoundException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public static Object readFile(String filename)
+	{
+		Object obj = new Object();
+
+		try
+		{
+			FileInputStream fi = new FileInputStream(new File(filename));
+			ObjectInputStream oi = new ObjectInputStream(fi);
+
+			// Read objects
+			obj = oi.readObject();
 
 			oi.close();
 			fi.close();
@@ -42,19 +86,19 @@ public class FileIO
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		return obj;
 	}
 
-	public void testWrite()
+	public static void writeFile(String filename, Object obj)
 	{
-		Item testItem = new Item("test 1", 1.99, "1234");
-
 		try
 		{
-			FileOutputStream f = new FileOutputStream(new File("myObjects.txt"));
+			FileOutputStream f = new FileOutputStream(new File(filename));
 			ObjectOutputStream o = new ObjectOutputStream(f);
 
 			// Write objects to file
-			o.writeObject(testItem);
+			o.writeObject(obj);
 
 			o.close();
 			f.close();

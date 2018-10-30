@@ -1,54 +1,68 @@
+
 package application;
 
-public class Product {
+import java.io.Serializable;
 
-	private Item item;
-	private int qty;
-	private int threshold;
-	private String supplier;
+public class Product implements Serializable
+{
+	private static final long serialVersionUID = 555L;	//serializable wants this
 
-	Product(Item item , int qty , int threshold , String supplier){
+	private Item	item;
+	private int		qty;
+	private int		threshold;
+	private String	supplier;
+
+	Product(Item item, int qty, int threshold, String supplier)
+	{
 		this.item = item;
 		this.qty = qty;
 		this.threshold = threshold;
 		this.supplier = supplier;
 	}
 
-	public Item getItem() {
+	public Item getItem()
+	{
 		return item;
 	}
 
-	public void setItem(Item item) {
+	public void setItem(Item item)
+	{
 		this.item = item;
 	}
 
-	public int getQty() {
+	public int getQty()
+	{
 		return qty;
 	}
 
-	public void setQty(int qty) {
+	public void setQty(int qty)
+	{
 		this.qty = qty;
 	}
 
-	public int getThreshold() {
+	public int getThreshold()
+	{
 		return threshold;
 	}
 
-	public void setThreshold(int threshold) {
+	public void setThreshold(int threshold)
+	{
 		this.threshold = threshold;
 	}
 
-	public String getSupplier() {
+	public String getSupplier()
+	{
 		return supplier;
 	}
 
-	public void setSupplier(String supplier) {
+	public void setSupplier(String supplier)
+	{
 		this.supplier = supplier;
 	}
 
-	public String toString() {
-		return " Item: " + item.getName() + ", Quantity: " + this.qty + ", Threshold: " + this.threshold
-				+ ", Supplier: " + this.supplier;
+	public String toString()
+	{
+		return " Item: " + item.getName() + ", Quantity: " + this.qty + ", Threshold: " + this.threshold + ", Supplier: " + this.supplier;
 	}
 
 	@Override

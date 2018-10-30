@@ -1,12 +1,14 @@
 package application;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
-public class UsersList
+public class UsersList implements Serializable
 {
+	private static final long serialVersionUID = 444L;	//serializable wants this
 
-	public static User				admin;
-	public static LinkedList<User>	user;
+	public User				admin;
+	public LinkedList<User>	user;
 
 	public UsersList()
 	{
@@ -39,7 +41,7 @@ public class UsersList
 //		user.remove(newUser);
 //	}
 
-	public static boolean validateAdmin(String inputUsername, String inputPassword)
+	public boolean validateAdmin(String inputUsername, String inputPassword)
 	{
 		if (admin.validateUser(inputUsername, inputPassword))
 		{
@@ -51,7 +53,7 @@ public class UsersList
 		}
 	}
 
-	public static Cashier validateUserCredentials(String inputUsername, String inputPassword)
+	public Cashier validateUserCredentials(String inputUsername, String inputPassword)
 	{
 		for (int i = 0; i < user.size(); i++)
 		{

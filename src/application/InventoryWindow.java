@@ -11,13 +11,16 @@ import javafx.scene.layout.VBox;
 
 public class InventoryWindow extends BaseWindow
 {
+	Inventory inventory;
 	boolean answerRequested;
 	boolean refreshRequested;
 	LinkedList<Button> itemButtons;
 
-	public InventoryWindow(boolean answerWanted, boolean refreshWanted)
+	public InventoryWindow(boolean answerWanted, boolean refreshWanted, Inventory inputInventory)
 	{
 		super(false);
+
+		inventory = inputInventory;
 
 		answerRequested = answerWanted;
 		refreshRequested = refreshWanted;
@@ -41,8 +44,7 @@ public class InventoryWindow extends BaseWindow
         {
             public void handle(ActionEvent event)
             {
-//            	UsersList.user.remove(userIndex);
-            	Inventory.prod_list.remove(productIndex);
+            	inventory.prod_list.remove(productIndex);
             	mainLayout.setCenter(createCenterPane());
             	stage.sizeToScene();
             }
@@ -59,7 +61,7 @@ public class InventoryWindow extends BaseWindow
                 {
                     if (event.getSource() == itemButtons.get(i))
                     {
-                    	answer = Inventory.prod_list.get(i).getItem();
+                    	answer = inventory.prod_list.get(i).getItem();
                     	stage.close();
                     }
                 }
@@ -116,36 +118,36 @@ public class InventoryWindow extends BaseWindow
 		GridPane.setMargin(itemSupplierLabel, new Insets(5, 5, 5, 5));
 		myGridPane.getChildren().add(itemSupplierLabel);
 
-		for (int i = 0; i < Inventory.prod_list.size(); i++)
+		for (int i = 0; i < inventory.prod_list.size(); i++)
 		{
 			horizontalIndex = 0;
 
-			Label itemName = new Label(Inventory.prod_list.get(i).getItem().getName());
+			Label itemName = new Label(inventory.prod_list.get(i).getItem().getName());
 			GridPane.setConstraints(itemName, horizontalIndex++, verticalIndex);
 			GridPane.setMargin(itemName, new Insets(5, 5, 5, 5));
 			myGridPane.getChildren().add(itemName);
 
-			Label itemCost = new Label(Double.toString(Inventory.prod_list.get(i).getItem().getPrice()));
+			Label itemCost = new Label(Double.toString(inventory.prod_list.get(i).getItem().getPrice()));
 			GridPane.setConstraints(itemCost, horizontalIndex++, verticalIndex);
 			GridPane.setMargin(itemCost, new Insets(5, 5, 5, 5));
 			myGridPane.getChildren().add(itemCost);
 
-			Label itemID = new Label(Inventory.prod_list.get(i).getItem().getId());
+			Label itemID = new Label(inventory.prod_list.get(i).getItem().getId());
 			GridPane.setConstraints(itemID, horizontalIndex++, verticalIndex);
 			GridPane.setMargin(itemID, new Insets(5, 5, 5, 5));
 			myGridPane.getChildren().add(itemID);
 
-			Label itemQuantity = new Label(Integer.toString(Inventory.prod_list.get(i).getQty()));
+			Label itemQuantity = new Label(Integer.toString(inventory.prod_list.get(i).getQty()));
 			GridPane.setConstraints(itemQuantity, horizontalIndex++, verticalIndex);
 			GridPane.setMargin(itemQuantity, new Insets(5, 5, 5, 5));
 			myGridPane.getChildren().add(itemQuantity);
 
-			Label itemThreshold = new Label(Integer.toString(Inventory.prod_list.get(i).getThreshold()));
+			Label itemThreshold = new Label(Integer.toString(inventory.prod_list.get(i).getThreshold()));
 			GridPane.setConstraints(itemThreshold, horizontalIndex++, verticalIndex);
 			GridPane.setMargin(itemThreshold, new Insets(5, 5, 5, 5));
 			myGridPane.getChildren().add(itemThreshold);
 
-			Label itemSupplier = new Label(Inventory.prod_list.get(i).getSupplier());
+			Label itemSupplier = new Label(inventory.prod_list.get(i).getSupplier());
 			GridPane.setConstraints(itemSupplier, horizontalIndex++, verticalIndex);
 			GridPane.setMargin(itemSupplier, new Insets(5, 5, 5, 5));
 			myGridPane.getChildren().add(itemSupplier);
@@ -159,7 +161,7 @@ public class InventoryWindow extends BaseWindow
 				GridPane.setConstraints(itemButton, horizontalIndex++, verticalIndex);
 				GridPane.setMargin(itemButton, new Insets(5, 5, 5, 5));
 				myGridPane.getChildren().add(itemButton);
-				if (Inventory.prod_list.get(i).getQty() <= 0)
+				if (inventory.prod_list.get(i).getQty() <= 0)
 				{
 					itemButton.setDisable(true);
 				}

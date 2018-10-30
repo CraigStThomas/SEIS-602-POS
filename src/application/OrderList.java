@@ -10,7 +10,7 @@ import java.util.UUID;
 public class OrderList implements Serializable
 {
 	private static final long serialVersionUID = 222L;	//serializable wants this
-	public static LinkedList<Order> order_list;
+	public LinkedList<Order> order_list;
 
 	public OrderList()
 	{

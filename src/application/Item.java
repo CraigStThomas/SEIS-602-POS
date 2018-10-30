@@ -1,18 +1,27 @@
 
 package application;
 
-public class Item
+import java.io.Serializable;
+
+public class Item implements Serializable
 {
+	private static final long serialVersionUID = 666L;	//serializable wants this
+
 	private String	name;
 	private double	price;
 	private String	id;
 
-	Item(String name, double price, String id)
+	public Item(String name, double price, String id)
 	{
 
 		this.name = name;
 		this.price = price;
 		this.id = id;
+	}
+
+	public Item copy()
+	{
+		return new Item(new String(name), price, new String(id));
 	}
 
 	public double getPrice()
