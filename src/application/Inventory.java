@@ -42,6 +42,8 @@ public class Inventory
 		prod_list.add(appleProduct);
 		Product pepperProduct = new Product(new Item("Bell Pepper", 0.99, "4088"), 5, 5, "Super Valu");
 		prod_list.add(pepperProduct);
+
+		writeFile();
 	}
 
 	public void writeFile()

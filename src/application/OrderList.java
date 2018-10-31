@@ -46,6 +46,8 @@ public class OrderList
 		tempOrder.setDateCreated("Jun 08 2017 12:57:35 PM");
 
 		order_list.add(tempOrder);
+
+		writeFile();
 	}
 
 	public void addtoList(Order order)
@@ -56,6 +58,16 @@ public class OrderList
 	public void removefromList(Order order)
 	{
 		order_list.remove(order);
+	}
+
+	public void writeFile()
+	{
+
+	}
+
+	public void readFile()
+	{
+
 	}
 
 	@Override

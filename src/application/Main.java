@@ -28,6 +28,7 @@ public class Main extends Application
 		usersList = new UsersList();
 		usersList.readFile();
 		transactionHistory = new TransactionHistory();
+		transactionHistory.readFile();
 
 //		CashierDrawer cashierDrawer = new CashierDrawer();
 //		cashierDrawer.register = new Register("reg123", "b.47A", "acme registers");
@@ -101,6 +102,8 @@ public class Main extends Application
 //		inventory2.readFile();
 
 //		System.out.println();
+
+//		System.out.println(transactionHistory);
 
 
 		applicationWindows.add(new HomeWindow(inventory, usersList, orderList, transactionHistory));

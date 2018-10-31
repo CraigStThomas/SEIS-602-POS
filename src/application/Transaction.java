@@ -16,6 +16,8 @@ public class Transaction
 	public Transaction()
 	{
 		items = new LinkedList<>();
+		cashier = new Cashier();
+		register = new Register();
 	}
 
 	public Transaction copy()

@@ -32,6 +32,8 @@ public class UsersList
 		user.add(new User("Adrien", "Adrien", "1234", "buff2949"));
 		user.add(new User("Craig", "Craig", "1234", "gabe2453"));
 		user.add(new User("Ishan", "Ishan", "1234", "mish6742"));
+
+		writeFile();
 	}
 
 	public void setAdmin(User newAdmin)
