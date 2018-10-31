@@ -1,14 +1,8 @@
 package application;
 
-import java.util.Calendar;
-import org.omg.CORBA.SetOverrideTypeHelper;
-import com.sun.corba.se.impl.resolver.ORBDefaultInitRefResolverImpl;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -124,7 +118,7 @@ public class OrderWindow extends BaseWindow
 			GridPane.setMargin(itemName, new Insets(5, 5, 5, 5));
 			myGridPane.getChildren().add(itemName);
 
-			Label itemCost = new Label(Double.toString(order.getProductList().get(i).getItem().getPrice()));
+			Label itemCost = new Label(String.format("%.2f", order.getProductList().get(i).getItem().getPrice()));
 			GridPane.setConstraints(itemCost, horizontalIndex++, verticalIndex);
 			GridPane.setMargin(itemCost, new Insets(5, 5, 5, 5));
 			myGridPane.getChildren().add(itemCost);
@@ -208,10 +202,6 @@ public class OrderWindow extends BaseWindow
 			GridPane.setMargin(addItemButton, new Insets(5, 5, 5, 5));
 			myGridPane.getChildren().add(addItemButton);
 
-
-
-
-
 			Button receiveOrderButton = new Button("Receive\nOrder");
 			receiveOrderButton.setOnAction(e ->
 			{
@@ -239,8 +229,10 @@ public class OrderWindow extends BaseWindow
 					}
 				}
 
+				inventory.writeFile();
+
 				order.setOrderReceived(true);
-				order.setDateReceived(java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()));
+				order.setDateReceived(DateAndTime.getDateAndTime());
 				mainLayout.setTop(createTopPane());
 				mainLayout.setCenter(createCenterPane());
 				stage.sizeToScene();

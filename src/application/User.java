@@ -1,12 +1,8 @@
 
 package application;
 
-import java.io.Serializable;
-
-public class User extends Cashier implements Serializable
+public class User extends Cashier
 {
-	private static final long serialVersionUID = 888L;	//serializable wants this
-
 	public String	username;
 	public String	password;
 

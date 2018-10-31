@@ -1,0 +1,12 @@
+Transaction ID,Transaction Date,Cashier Name,Cashier ID,Register ID,Register Model,Register Vendor,Items Returned?,Item Name,Item Price,Item ID
+
+fa68a9c542,Oct 31 2018 4:17:23 AM,Craig,gabe2453,123,B.47A,Acme Registers,false,Bell Pepper,0.99,4088
+,,,,,,,,Bell Pepper,0.99,4088
+
+06620037b5,Oct 31 2018 4:18:49 AM,Aba,doug1324,123,B.47A,Acme Registers,false,Shirt,17.99,bc7ys99k
+,,,,,,,,Shirt,17.99,bc7ys99k
+
+d85cf016e7,Oct 31 2018 4:17:09 AM,Craig,gabe2453,123,B.47A,Acme Registers,false,Banana,0.99,4011
+,,,,,,,,Banana,0.99,4011
+
+104d32dc5c,Oct 31 2018 4:19:29 AM,Adrien,buff2949,999,B.47A,Acme Registers,false,Hat,9.99,cap1b73

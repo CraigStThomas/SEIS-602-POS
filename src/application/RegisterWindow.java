@@ -1,6 +1,5 @@
 package application;
 
-import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.UUID;
 import javafx.event.ActionEvent;
@@ -8,13 +7,9 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import sun.awt.image.ImageWatched.Link;
 
 public class RegisterWindow extends BaseWindow
 {
@@ -46,6 +41,7 @@ public class RegisterWindow extends BaseWindow
     Transaction myTransactionCopy;
     CashierDrawer cashierDrawer;
     Register thisRegister;
+    RegisterDrawer registerDrawer;
 
     boolean validCashier;
     Cashier thisCashier;
@@ -91,7 +87,7 @@ public class RegisterWindow extends BaseWindow
     	cashierDrawer = new CashierDrawer();
     	cashierDrawer.cashier = thisCashier;
     	cashierDrawer.register = thisRegister;
-    	cashierDrawer.loginTime = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+    	cashierDrawer.loginTime = DateAndTime.getDateAndTime();
 
     	validCashier = true;
     	cashierLoginButton.setDisable(true);
@@ -101,8 +97,8 @@ public class RegisterWindow extends BaseWindow
 
     void logoutCashier()
     {
-    	cashierDrawer.logoutTime = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
-    	//todo: something with the cashier drawer
+    	cashierDrawer.logoutTime = DateAndTime.getDateAndTime();
+    	cashierDrawer.writeToFile();
 
     	validCashier = false;
     	cashierLoginButton.setDisable(false);
@@ -113,9 +109,15 @@ public class RegisterWindow extends BaseWindow
     void closeRegister()
     {
     	stage.close();
+    	registerDrawer.logoutTime = DateAndTime.getDateAndTime();
+    	registerDrawer.writeToFile();
     }
 
-    public RegisterWindow(Register inputRegister, Inventory inputInventory, UsersList inputUserList, TransactionHistory inputTransactionHistory)
+    public RegisterWindow(Register inputRegister,
+    		              RegisterDrawer inputRegisterDrawer,
+    		              Inventory inputInventory,
+    		              UsersList inputUserList,
+    		              TransactionHistory inputTransactionHistory)
     {
     	super(false);
     	inventory = inputInventory;
@@ -123,6 +125,7 @@ public class RegisterWindow extends BaseWindow
     	transactionHistory = inputTransactionHistory;
     	thisCashier = new Cashier();
 		thisRegister = inputRegister;
+		registerDrawer = inputRegisterDrawer;
     	validCashier = false;
     	buildStage(false);
 		stage.setTitle("Register");
@@ -210,7 +213,7 @@ public class RegisterWindow extends BaseWindow
     		removeItemButtons = new LinkedList<>();
     		myTransaction = new Transaction();
 
-    		myTransaction.setDate(java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()));
+    		myTransaction.setDate(DateAndTime.getDateAndTime());
     		myTransaction.setCashier(thisCashier);
     		myTransaction.setRegister(thisRegister);
     		myTransaction.setId(UUID.randomUUID().toString().replace("-", "").substring(0, 10));
@@ -348,8 +351,11 @@ public class RegisterWindow extends BaseWindow
 		{
 //			newTransactionButton.setDisable(false);
 //			itemReturnButton.setDisable(false);
+			inventory.writeFile();
 			cashierDrawer.transactionList.add(myTransaction);
-			transactionHistory.transactions.add(myTransaction);
+			transactionHistory.addTransaction(myTransaction);
+			transactionHistory.writeToFile();
+			registerDrawer.transactionList.add(myTransaction);
 			enableRegisterButtons();
 			mainLayout.setRight(null);
 	        stage.sizeToScene();
@@ -425,12 +431,15 @@ public class RegisterWindow extends BaseWindow
 //	        	{
 //		        	myTransaction.items.add(inventory.prod_list.get(i).getItem());
 //	        	}
-	        	for (Transaction tempTransaction : transactionHistory.transactions)
+	        	for (Transaction tempTransaction : transactionHistory.getTransactions())
 				{
 					if (tempTransaction.getId().equals(transactionID.getText()))
 					{
 						myTransaction = tempTransaction.copy();
 						myTransactionCopy = tempTransaction.copy();
+						myTransaction.returnTransaction = true;
+						myTransaction.getCashier().setName(thisCashier.getName());
+						myTransaction.getCashier().setId(thisCashier.getId());
 
 			        	mainLayout.setRight(itemReturn(myTransaction));
 			        	stage.sizeToScene();
@@ -592,7 +601,9 @@ public class RegisterWindow extends BaseWindow
 					inventory.buyItem(item);
 				}
 
-    			transactionHistory.transactions.remove(myTransactionCopy);	//remove transaction from history
+    			inventory.writeFile();
+
+    			transactionHistory.removeTransaction(myTransactionCopy);	//remove transaction from history
 
     			for (Item item : myTransaction.items)	//remove items from transaction copy
 				{
@@ -601,11 +612,14 @@ public class RegisterWindow extends BaseWindow
 
     			if (myTransactionCopy.items.size() > 0)	//if there are still items in the transaction copy, place the remainder in the transaction history
     			{
-    				transactionHistory.transactions.add(myTransactionCopy);
+    				transactionHistory.addTransaction(myTransactionCopy);
     			}
+
+    			transactionHistory.writeToFile();
 
     			myTransaction.returnTransaction = true;
     			cashierDrawer.transactionList.add(myTransaction);	//record the return transaction
+    			registerDrawer.transactionList.add(myTransaction);
 
     			enableRegisterButtons();
     			mainLayout.setRight(null);

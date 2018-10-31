@@ -1,13 +1,10 @@
 
 package application;
 
-import java.io.Serializable;
 import java.util.LinkedList;
 
-public class Transaction implements Serializable
+public class Transaction
 {
-	private static final long serialVersionUID = 999L;	//serializable wants this
-
 	private String		transactionID;
 	private Cashier		cashier;
 	private Register	register;

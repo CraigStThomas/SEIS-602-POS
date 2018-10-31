@@ -1,12 +1,9 @@
 package application;
 
-import java.io.Serializable;
 import java.util.LinkedList;
 
-public class UsersList implements Serializable
+public class UsersList
 {
-	private static final long serialVersionUID = 444L;	//serializable wants this
-
 	public User				admin;
 	public LinkedList<User>	user;
 
@@ -20,10 +17,10 @@ public class UsersList implements Serializable
 		admin = new User("admin", "admin", "admin", "0");
 
 		user = new LinkedList<>();
-		user.add(new User("Aba", "Aba", "1234", "a"));
-		user.add(new User("Adrien", "Adrien", "1234", "b"));
-		user.add(new User("Craig", "Craig", "1234", "c"));
-		user.add(new User("Ishan", "Ishan", "1234", "d"));
+		user.add(new User("Aba", "Aba", "1234", "doug1324"));
+		user.add(new User("Adrien", "Adrien", "1234", "buff2949"));
+		user.add(new User("Craig", "Craig", "1234", "gabe2453"));
+		user.add(new User("Ishan", "Ishan", "1234", "mish6742"));
 	}
 
 	public void setAdmin(User newAdmin)

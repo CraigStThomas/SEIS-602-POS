@@ -3,13 +3,9 @@ package application;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.UUID;
-import java.io.Serializable;
-import java.util.Calendar;
 
-public class Order implements Serializable
+public class Order
 {
-	private static final long serialVersionUID = 777L;	//serializable wants this
-
 	private LinkedList<Product>	productList;
 	private String				dateCreated;
 	private String				dateReceived;
@@ -19,7 +15,7 @@ public class Order implements Serializable
 	public Order()
 	{
 		productList = new LinkedList<>();
-		dateCreated = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+		dateCreated = DateAndTime.getDateAndTime();
 		dateReceived = new String();
 		id = UUID.randomUUID().toString().replace("-", "").substring(0, 10);
 		orderReceived = false;
@@ -28,7 +24,7 @@ public class Order implements Serializable
 	public Order(LinkedList<Product> inputProductList)
 	{
 		productList = inputProductList;
-		dateCreated = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+		dateCreated = DateAndTime.getDateAndTime();
 		dateReceived = new String();
 		id = UUID.randomUUID().toString().replace("-", "").substring(0, 10);
 		orderReceived = false;

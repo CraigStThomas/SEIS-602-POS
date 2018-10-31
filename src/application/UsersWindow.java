@@ -1,7 +1,5 @@
 package application;
 
-import java.util.LinkedList;
-import javax.jws.soap.SOAPBinding.Use;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;

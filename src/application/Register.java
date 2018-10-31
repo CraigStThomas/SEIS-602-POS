@@ -1,17 +1,13 @@
 
 package application;
 
-import java.io.Serializable;
-
-public class Register implements Serializable
+public class Register
 {
-	private static final long serialVersionUID = 101010L;	//serializable wants this
-
 	private String	id;
 	private String	model;
 	private String	vendor;
 
-	public Register()
+	public Register ()
 	{
 
 	}

@@ -13,33 +13,6 @@ public class Main extends Application
 	TransactionHistory transactionHistory;
 
 	private static LinkedList<BaseWindow> applicationWindows = new LinkedList<>();
-	private static boolean loginValid = false;
-	private static String usernameAdmin = "banana";
-	private static String passwordAdmin = "apple";
-
-	static boolean checkUsernameAdmin(String inputString)
-	{
-		boolean returnValue = false;
-
-		if (inputString.equals(usernameAdmin))
-		{
-			returnValue = true;
-		}
-
-		return returnValue;
-	}
-
-	static boolean checkPasswordAdmin(String inputString)
-	{
-		boolean returnValue = false;
-
-		if (inputString.equals(passwordAdmin))
-		{
-			returnValue = true;
-		}
-
-		return returnValue;
-	}
 
 	public static LinkedList<BaseWindow> getApplicationWindows()
 	{
@@ -50,11 +23,71 @@ public class Main extends Application
 	public void start(Stage primaryStage)
 	{
 		orderList = new OrderList(1);
-		inventory = new Inventory(1, orderList);
+		inventory = new Inventory(orderList);
+		inventory.readFile();
 		usersList = new UsersList(1);
 		transactionHistory = new TransactionHistory();
 
-//		FileIO.test();
+//		CashierDrawer cashierDrawer = new CashierDrawer();
+//		cashierDrawer.register = new Register("reg123", "b.47A", "acme registers");
+//		cashierDrawer.cashier = new Cashier("my dude", "dude123");
+//		cashierDrawer.loginTime = DateAndTime.getDateAndTime();
+//		cashierDrawer.logoutTime = DateAndTime.getDateAndTime();
+//
+//		Transaction myTransaction = new Transaction();
+//		myTransaction.returnTransaction = true;
+//		myTransaction.setCashier(new Cashier("some guy", "abcd"));
+//		myTransaction.setRegister(new Register("112233", "", ""));
+//		myTransaction.setId("111222333");
+//		myTransaction.setDate(DateAndTime.getDateAndTime());
+//
+//		myTransaction.items.add(new Item("Thing 1", 1.99, "asg7"));
+//		myTransaction.items.add(new Item("Thing 2", 2.99, "aehr"));
+//		myTransaction.items.add(new Item("Thing 3", 3.99, "24yb"));
+//		cashierDrawer.transactionList.add(myTransaction);
+//
+//		myTransaction = new Transaction();
+//		myTransaction.returnTransaction = true;
+//		myTransaction.setCashier(new Cashier("some guy", "abcd"));
+//		myTransaction.setRegister(new Register("112233", "", ""));
+//		myTransaction.setId("333222111");
+//		myTransaction.setDate(DateAndTime.getDateAndTime());
+//
+//		myTransaction.items.add(new Item("Thing 1", 1.99, "asg7"));
+//		myTransaction.items.add(new Item("Thing 2", 2.99, "aehr"));
+//		myTransaction.items.add(new Item("Thing 3", 3.99, "24yb"));
+//		cashierDrawer.addTransaction(myTransaction);
+//
+//		cashierDrawer.writeToFile();
+//
+//		RegisterDrawer registerDrawer = new RegisterDrawer(new Register("jyct6", "b.47a", "acme registers"));
+//		registerDrawer.loginTime = DateAndTime.getDateAndTime();
+//		registerDrawer.logoutTime = DateAndTime.getDateAndTime();
+//
+//		myTransaction = new Transaction();
+//		myTransaction.returnTransaction = true;
+//		myTransaction.setCashier(new Cashier("some guy", "abcd"));
+//		myTransaction.setRegister(new Register("112233", "", ""));
+//		myTransaction.setId("111222333");
+//		myTransaction.setDate(DateAndTime.getDateAndTime());
+//
+//		myTransaction.items.add(new Item("Thing 1", 1.99, "asg7"));
+//		myTransaction.items.add(new Item("Thing 2", 2.99, "aehr"));
+//		myTransaction.items.add(new Item("Thing 3", 3.99, "24yb"));
+//		registerDrawer.transactionList.add(myTransaction);
+//
+//		myTransaction = new Transaction();
+//		myTransaction.setCashier(new Cashier("some guy", "abcd"));
+//		myTransaction.setRegister(new Register("112233", "", ""));
+//		myTransaction.setId("333222111");
+//		myTransaction.setDate(DateAndTime.getDateAndTime());
+//
+//		myTransaction.items.add(new Item("Thing 1", 1.99, "asg7"));
+//		myTransaction.items.add(new Item("Thing 2", 2.99, "aehr"));
+//		myTransaction.items.add(new Item("Thing 3", 3.99, "24yb"));
+//		registerDrawer.transactionList.add(myTransaction);
+//
+//		registerDrawer.writeToFile();
 
 
 		applicationWindows.add(new HomeWindow(inventory, usersList, orderList, transactionHistory));

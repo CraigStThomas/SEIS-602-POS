@@ -1,12 +1,8 @@
 
 package application;
 
-import java.io.Serializable;
-
-public class Cashier implements Serializable
+public class Cashier
 {
-	private static final long serialVersionUID = 111111L;	//serializable wants this
-
 	protected String name;
 	protected String id;
 

@@ -45,6 +45,7 @@ public class InventoryWindow extends BaseWindow
             public void handle(ActionEvent event)
             {
             	inventory.prod_list.remove(productIndex);
+            	inventory.writeFile();
             	mainLayout.setCenter(createCenterPane());
             	stage.sizeToScene();
             }
@@ -127,7 +128,7 @@ public class InventoryWindow extends BaseWindow
 			GridPane.setMargin(itemName, new Insets(5, 5, 5, 5));
 			myGridPane.getChildren().add(itemName);
 
-			Label itemCost = new Label(Double.toString(inventory.prod_list.get(i).getItem().getPrice()));
+			Label itemCost = new Label(String.format("%.2f", inventory.prod_list.get(i).getItem().getPrice()));
 			GridPane.setConstraints(itemCost, horizontalIndex++, verticalIndex);
 			GridPane.setMargin(itemCost, new Insets(5, 5, 5, 5));
 			myGridPane.getChildren().add(itemCost);

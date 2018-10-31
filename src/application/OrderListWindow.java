@@ -1,6 +1,5 @@
 package application;
 
-import java.util.LinkedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -8,7 +7,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import sun.awt.image.ImageWatched.Link;
 
 public class OrderListWindow extends BaseWindow
 {
@@ -65,6 +63,23 @@ public class OrderListWindow extends BaseWindow
 		GridPane.setConstraints(orderDateReceivedLabel, horizontalIndex++, verticalIndex++);
 		GridPane.setMargin(orderDateReceivedLabel, new Insets(5, 5, 5, 5));
 		myGridPane.getChildren().add(orderDateReceivedLabel);
+
+		int loopValue = 0;
+
+		while (loopValue != -1)
+		{
+			loopValue = -1;
+
+			for (int i = 0; i < orderList.order_list.size(); i++)
+			{
+				if ((orderList.order_list.get(i).getOrderReceived()) && (DateAndTime.oneYearPassed(orderList.order_list.get(i).getDateCreated(), DateAndTime.getDateAndTime())))
+				{
+					orderList.order_list.remove(i);
+					loopValue = 0;
+					break;
+				}
+			}
+		}
 
 		for(int i = 0; i < orderList.order_list.size(); i++)
 		{

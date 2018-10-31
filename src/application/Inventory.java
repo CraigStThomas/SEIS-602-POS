@@ -2,22 +2,18 @@
 package application;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.ListIterator;
+import java.util.Scanner;
 
-public class Inventory implements Serializable
+public class Inventory
 {
-	private static final long serialVersionUID = 111L;	//serializable wants this
-	OrderList orderList;
+	OrderList					orderList;
 
-	public LinkedList<Product> prod_list;
+	public LinkedList<Product>	prod_list;
 
 	public Inventory()
 	{
@@ -35,67 +31,90 @@ public class Inventory implements Serializable
 		orderList = inputOrderList;
 
 		prod_list = new LinkedList<Product>();
-		Product testProduct1 = new Product(new Item("thing 1", 12.99, "23l5u"), 7, 3, "supplier 1");
-		prod_list.add(testProduct1);
-		Product testProduct2 = new Product(new Item("thing 2", 7.99, "asfh8"), 7, 4, "supplier 1");
-		prod_list.add(testProduct2);
-		Product testProduct3 = new Product(new Item("thing 3", 4.99, "s8sd2"), 7, 5, "supplier 1");
-		prod_list.add(testProduct3);
+		makeDummyData();
+	}
+
+	private void makeDummyData()
+	{
+		Product bananaProduct = new Product(new Item("Banana", 0.99, "4011"), 5, 3, "Super Valu");
+		prod_list.add(bananaProduct);
+		Product appleProduct = new Product(new Item("Apple", 1.49, "3294"), 9, 4, "Super Valu");
+		prod_list.add(appleProduct);
+		Product pepperProduct = new Product(new Item("Bell Pepper", 0.99, "4088"), 5, 5, "Super Valu");
+		prod_list.add(pepperProduct);
 	}
 
 	public void writeFile()
 	{
+		final String filepath = "Reports";
+		final String filename = "Inventory.csv";
+		final String tempfilename = "temp.txt";
+
 		try
 		{
-			FileOutputStream f = new FileOutputStream(new File("POS_Inventory.txt"));
-			ObjectOutputStream o = new ObjectOutputStream(f);
+			File dir = new File(filepath);
+			if (dir.exists() == false)
+			{
+				dir.mkdir();
+			}
 
-			// Write objects to file
-			o.writeObject(this);
+			File file = new File(filepath + "\\" + filename);
+			File tempfile = new File(filepath + "\\" + tempfilename);
+			file.createNewFile();
+			PrintWriter output = new PrintWriter(filepath + "\\" + tempfilename);
+//			Scanner input = new Scanner(filepath + "\\" + filename);
+			for (Product prod : prod_list)
+			{
+				output.println(prod.getItem().getName() + "," +
+							   prod.getItem().getPrice() + "," +
+							   prod.getItem().getId() + "," +
+							   Integer.toString(prod.getQty()) + "," +
+							   Integer.toString(prod.getThreshold()) + "," +
+							   prod.getSupplier());
 
-			o.close();
-			f.close();
+			}
+			output.close();
+			file.delete();
+			tempfile.renameTo(file);
+
 		}
-		catch (FileNotFoundException e)
-		{
-			System.out.println("File not found");
-		}
+
 		catch (IOException e)
 		{
-			System.out.println("Error initializing stream");
+
+			e.printStackTrace();
 		}
 	}
 
-	public Inventory readFile()
+	public void readFile()
 	{
-		Inventory tempInventory = new Inventory();
+		final String filepath = "Reports";
+		final String filename = "Inventory.csv";
 
+		File file = new File(filepath + "\\" + filename);
+
+		String data;
+		String[] values;
 		try
 		{
-			FileInputStream fi = new FileInputStream(new File("POS_Inventory.txt"));
-			ObjectInputStream oi = new ObjectInputStream(fi);
+			Scanner input = new Scanner(file);
+			while (input.hasNext())
+			{
+				data = input.nextLine();
+				values = data.split(",");
 
-			// Read objects
-			tempInventory = (Inventory) oi.readObject();
+				Product product = new Product(new Item(values[0], Double.parseDouble(values[1]), values[2]), Integer.parseInt(values[3]), Integer.parseInt(values[4]), values[5]);
+				prod_list.add(product);
 
-			oi.close();
-			fi.close();
+			}
+
+			input.close();
+
 		}
 		catch (FileNotFoundException e)
 		{
-			System.out.println("File not found");
+			makeDummyData();
 		}
-		catch (IOException e)
-		{
-			System.out.println("Error initializing stream");
-		}
-		catch (ClassNotFoundException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return tempInventory;
 	}
 
 	public void addProduct(Product prod)
@@ -135,7 +154,7 @@ public class Inventory implements Serializable
 				if (product.getQty() < product.getThreshold())
 				{
 					LinkedList<Product> tempProductList = new LinkedList<>();
-					tempProductList.add(new Product(product.getItem(), 10, 0, product.getSupplier()));
+					tempProductList.add(new Product(product.getItem(), 10, -1, product.getSupplier()));
 					orderList.order_list.add(new Order(tempProductList));
 				}
 			}

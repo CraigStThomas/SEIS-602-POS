@@ -109,7 +109,7 @@ public class HomeWindow extends BaseWindow
 				myRegister.setModel("B.47A");
 				myRegister.setVendor("Acme Registers");
 				mainLayout.setCenter(createCenterPane());
-				Main.getApplicationWindows().add(new RegisterWindow(myRegister, inventory, usersList, transactionHistory));
+				Main.getApplicationWindows().add(new RegisterWindow(myRegister, new RegisterDrawer(myRegister),inventory, usersList, transactionHistory));
 			}
 		});
 		GridPane.setConstraints(createRegister, 0, index++);
