@@ -1,0 +1,21 @@
+things to do for POS
+
+features to implement
+    file reading/writing
+        transactions
+            read
+                boot-up only
+        orders
+            read
+                boot-up only
+            write
+                order created
+                order purged
+                order received
+                order item added
+
+bugs
+    register screen
+        transaction
+            below threshold will spawn an order each time the item is added to a transaction
+                should probably check if there is an unreceived order on file that has the item in it
