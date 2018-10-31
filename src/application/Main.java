@@ -25,7 +25,8 @@ public class Main extends Application
 		orderList = new OrderList(1);
 		inventory = new Inventory(orderList);
 		inventory.readFile();
-		usersList = new UsersList(1);
+		usersList = new UsersList();
+		usersList.readFile();
 		transactionHistory = new TransactionHistory();
 
 //		CashierDrawer cashierDrawer = new CashierDrawer();
@@ -58,7 +59,7 @@ public class Main extends Application
 //		myTransaction.items.add(new Item("Thing 3", 3.99, "24yb"));
 //		cashierDrawer.addTransaction(myTransaction);
 //
-//		cashierDrawer.writeToFile();
+//		cashierDrawer.writeFile();
 //
 //		RegisterDrawer registerDrawer = new RegisterDrawer(new Register("jyct6", "b.47a", "acme registers"));
 //		registerDrawer.loginTime = DateAndTime.getDateAndTime();
@@ -87,7 +88,19 @@ public class Main extends Application
 //		myTransaction.items.add(new Item("Thing 3", 3.99, "24yb"));
 //		registerDrawer.transactionList.add(myTransaction);
 //
-//		registerDrawer.writeToFile();
+//		registerDrawer.writeFile();
+
+//		usersList.writeFile();
+//
+//		UsersList tempList = new UsersList();
+//		tempList.readFile();
+
+//		inventory.writeFile();
+//
+//		Inventory inventory2 = new Inventory();
+//		inventory2.readFile();
+
+//		System.out.println();
 
 
 		applicationWindows.add(new HomeWindow(inventory, usersList, orderList, transactionHistory));

@@ -38,7 +38,7 @@ public class TransactionHistory
 		transactions.add(transaction);
 	}
 
-	public void writeToFile()
+	public void writeFile()
 	{
 		final String filepath = "Reports";
 		final String filename = "Transaction History.csv";

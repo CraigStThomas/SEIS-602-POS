@@ -38,6 +38,7 @@ public class UsersWindow extends BaseWindow
     	{
 
         	usersList.user.add(new User(newUserName.getText(), newUserUsername.getText(), newUserPassword.getText(), newUserID.getText()));
+        	usersList.writeFile();
         	mainLayout.setCenter(createCenterPane());
         	stage.sizeToScene();
     	}
@@ -50,6 +51,7 @@ public class UsersWindow extends BaseWindow
             public void handle(ActionEvent event)
             {
             	usersList.user.remove(userIndex);
+            	usersList.writeFile();
             	mainLayout.setCenter(createCenterPane());
             	stage.sizeToScene();
             }

@@ -19,7 +19,7 @@ public class RegisterDrawer
 		register = inputRegister;
 	}
 
-	public void writeToFile()
+	public void writeFile()
 	{
 		final String reportsFolder = "Reports";
 		final String filepath = "Reports\\Register Reports";

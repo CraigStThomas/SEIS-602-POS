@@ -62,7 +62,14 @@ public class Inventory
 			File tempfile = new File(filepath + "\\" + tempfilename);
 			file.createNewFile();
 			PrintWriter output = new PrintWriter(filepath + "\\" + tempfilename);
-//			Scanner input = new Scanner(filepath + "\\" + filename);
+
+			output.println("Item Name" + "," +
+					   	   "Price" + "," +
+					   	   "ID" + "," +
+					   	   "Quantity" + "," +
+					   	   "Threshold" + "," +
+					   	   "Supplier");
+
 			for (Product prod : prod_list)
 			{
 				output.println(prod.getItem().getName() + "," +
@@ -98,6 +105,13 @@ public class Inventory
 		try
 		{
 			Scanner input = new Scanner(file);
+
+			//burn the header
+			if (input.hasNext())
+			{
+				data = input.nextLine();
+			}
+
 			while (input.hasNext())
 			{
 				data = input.nextLine();

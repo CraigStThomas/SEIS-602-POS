@@ -24,7 +24,7 @@ public class CashierDrawer
 		transactionList.add(transaction);
 	}
 
-	public void writeToFile()
+	public void writeFile()
 	{
 		final String reportsFolder = "Reports";
 		final String filepath = "Reports\\Cashier Reports";

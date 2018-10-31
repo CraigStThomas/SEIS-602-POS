@@ -1,9 +1,0 @@
-Register ID,999
-Register Model,B.47A
-Register Vendor,Acme Registers
-
-Transaction ID,Transaction Date,Cashier Name,Cashier ID,Items Returned?,Item Name,Item Price,Item ID
-
-104d32dc5c,Oct 31 2018 4:19:29 AM,Adrien,buff2949,false,Hat,9.99,cap1b73
-
-,,,,,Total,9.99

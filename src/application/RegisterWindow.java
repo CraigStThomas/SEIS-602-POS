@@ -98,7 +98,7 @@ public class RegisterWindow extends BaseWindow
     void logoutCashier()
     {
     	cashierDrawer.logoutTime = DateAndTime.getDateAndTime();
-    	cashierDrawer.writeToFile();
+    	cashierDrawer.writeFile();
 
     	validCashier = false;
     	cashierLoginButton.setDisable(false);
@@ -110,7 +110,7 @@ public class RegisterWindow extends BaseWindow
     {
     	stage.close();
     	registerDrawer.logoutTime = DateAndTime.getDateAndTime();
-    	registerDrawer.writeToFile();
+    	registerDrawer.writeFile();
     }
 
     public RegisterWindow(Register inputRegister,
@@ -354,7 +354,7 @@ public class RegisterWindow extends BaseWindow
 			inventory.writeFile();
 			cashierDrawer.transactionList.add(myTransaction);
 			transactionHistory.addTransaction(myTransaction);
-			transactionHistory.writeToFile();
+			transactionHistory.writeFile();
 			registerDrawer.transactionList.add(myTransaction);
 			enableRegisterButtons();
 			mainLayout.setRight(null);
@@ -615,7 +615,7 @@ public class RegisterWindow extends BaseWindow
     				transactionHistory.addTransaction(myTransactionCopy);
     			}
 
-    			transactionHistory.writeToFile();
+    			transactionHistory.writeFile();
 
     			myTransaction.returnTransaction = true;
     			cashierDrawer.transactionList.add(myTransaction);	//record the return transaction
