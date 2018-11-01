@@ -28,7 +28,7 @@ public class OrderListWindow extends BaseWindow
         {
             public void handle(ActionEvent event)
             {
-            	OrderWindow orderWindow = new OrderWindow(orderList.order_list.get(index), inventory);
+            	OrderWindow orderWindow = new OrderWindow(orderList.order_list.get(index), inventory, orderList);
             }
         };
     }
@@ -75,6 +75,7 @@ public class OrderListWindow extends BaseWindow
 				if ((orderList.order_list.get(i).getOrderReceived()) && (DateAndTime.oneYearPassed(orderList.order_list.get(i).getDateCreated(), DateAndTime.getDateAndTime())))
 				{
 					orderList.order_list.remove(i);
+					orderList.writeFile();
 					loopValue = 0;
 					break;
 				}
@@ -112,6 +113,7 @@ public class OrderListWindow extends BaseWindow
 		newOrderButton.setOnAction(e ->
 		{
 			orderList.order_list.add(new Order());
+			orderList.writeFile();
 			mainLayout.setCenter(createCenterPane());
 			stage.sizeToScene();
 		});

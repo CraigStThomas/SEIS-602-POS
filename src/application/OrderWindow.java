@@ -1,5 +1,7 @@
 package application;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -10,6 +12,7 @@ import javafx.scene.layout.VBox;
 public class OrderWindow extends BaseWindow
 {
 	Inventory inventory;
+	OrderList orderList;
 	Order order;
 	TextField newOrderItemName;
 	TextField newOrderItemCost;
@@ -18,19 +21,35 @@ public class OrderWindow extends BaseWindow
 	TextField newOrderItemThreshold;
 	TextField newOrderItemSupplier;
 
-	public OrderWindow(Order inputOrder, Inventory inputInventory)
+	public OrderWindow(Order inputOrder, Inventory inputInventory, OrderList inputOrderList)
 	{
 		super(false);
 		inventory = inputInventory;
+		orderList = inputOrderList;
 		order = inputOrder;
 		buildStage(false);
 	}
+
+	private EventHandler<ActionEvent> removeProduct(int productIndex)
+    {
+        return new EventHandler<ActionEvent>()
+        {
+            public void handle(ActionEvent event)
+            {
+            	order.getProductList().remove(productIndex);
+            	orderList.writeFile();
+            	mainLayout.setCenter(createCenterPane());
+            	stage.sizeToScene();
+            }
+        };
+    }
 
 	private void addItemToOrder()
 	{
 		Item tempItem = new Item(newOrderItemName.getText(), Double.parseDouble(newOrderItemCost.getText()), newOrderItemID.getText());
 		Product tempProduct = new Product(tempItem, Integer.parseInt(newOrderItemQuantity.getText()), Integer.parseInt(newOrderItemThreshold.getText()), newOrderItemSupplier.getText());
 		order.addProduct(tempProduct);
+		orderList.writeFile();
 		mainLayout.setCenter(createCenterPane());
 		stage.sizeToScene();
 	}
@@ -143,6 +162,16 @@ public class OrderWindow extends BaseWindow
 			GridPane.setMargin(itemSupplier, new Insets(5, 5, 5, 5));
 			myGridPane.getChildren().add(itemSupplier);
 
+			if (order.getOrderReceived() == false)
+			{
+				EventHandler<ActionEvent> action = removeProduct(i);
+				Button removeProductButton = new Button("Remove Product");
+				removeProductButton.setOnAction(action);
+				GridPane.setConstraints(removeProductButton, horizontalIndex++, verticalIndex);
+				GridPane.setMargin(removeProductButton, new Insets(5, 5, 5, 5));
+				myGridPane.getChildren().add(removeProductButton);
+			}
+
 			verticalIndex++;
 		}
 
@@ -233,6 +262,7 @@ public class OrderWindow extends BaseWindow
 
 				order.setOrderReceived(true);
 				order.setDateReceived(DateAndTime.getDateAndTime());
+				orderList.writeFile();
 				mainLayout.setTop(createTopPane());
 				mainLayout.setCenter(createCenterPane());
 				stage.sizeToScene();

@@ -20,6 +20,18 @@ public class Item
 		return new Item(new String(name), price, new String(id));
 	}
 
+	public boolean equals(Item item)
+	{
+		boolean returnValue = false;
+
+		if ((item.id.equals(id)) && (item.name.equals(name)) && (item.price == price))
+		{
+			returnValue = true;
+		}
+
+		return returnValue;
+	}
+
 	public double getPrice()
 	{
 		return price;

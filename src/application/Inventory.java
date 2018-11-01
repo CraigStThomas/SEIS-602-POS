@@ -169,6 +169,19 @@ public class Inventory
 
 				if (product.getQty() < product.getThreshold())
 				{
+					for (Order order : orderList.order_list)
+					{
+						if (order.getOrderReceived() == false)
+						{
+							for (Product orderProduct : order.getProductList())
+							{
+								if (orderProduct.getItem().equals(item))
+								{
+									return;
+								}
+							}
+						}
+					}
 					LinkedList<Product> tempProductList = new LinkedList<>();
 					tempProductList.add(new Product(product.getItem(), 10, -1, product.getSupplier()));
 					orderList.order_list.add(new Order(tempProductList));

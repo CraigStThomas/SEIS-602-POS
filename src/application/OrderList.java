@@ -1,8 +1,13 @@
 
 package application;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.ListIterator;
+import java.util.Scanner;
 
 public class OrderList
 {
@@ -62,12 +67,141 @@ public class OrderList
 
 	public void writeFile()
 	{
+		final String filepath = "Reports";
+		final String filename = "OrderList.csv";
+		final String tempfilename = "temp.txt";
 
+		try
+		{
+			File dir = new File(filepath);
+			if (dir.exists() == false)
+			{
+				dir.mkdir();
+			}
+
+			File file = new File(filepath + "\\" + filename);
+			file.createNewFile();
+			File tempfile = new File(filepath + "\\" + tempfilename);
+			PrintWriter output = new PrintWriter(filepath + "\\" + tempfilename);
+
+
+			output.println("Order ID" + "," +
+		               	   "Order Received" + "," +
+		               	   "Date Created" + "," +
+		               	   "Date Received" + "," +
+		               	   "Item Name" + "," +
+					   	   "Item Price" + "," +
+					   	   "Item ID" + "," +
+					   	   "Quantity" + "," +
+					   	   "Threshold" + "," +
+					   	   "Supplier");
+
+			for (Order order : order_list)
+			{
+				int index = 0;
+
+//				output.println();
+
+				for (Product product : order.getProductList())
+				{
+					String orderID = "";
+					String orderReceived = "";
+					String dateCreated = "";
+					String dateReceived = "";
+
+					if (index == 0)
+					{
+						orderID = order.getId();
+						orderReceived = Boolean.toString(order.getOrderReceived());
+						dateCreated = order.getDateCreated();
+						dateReceived = order.getDateReceived();
+					}
+
+					output.println(orderID + "," +
+					               orderReceived + "," +
+					               dateCreated + "," +
+								   dateReceived + "," +
+								   product.getItem().getName() + "," +
+								   product.getItem().getPrice() + "," +
+								   product.getItem().getId() + "," +
+					               product.getQty() + "," +
+					               product.getThreshold() + "," +
+					               product.getSupplier());
+					index++;
+				}
+			}
+//			input.close();
+			output.close();
+			file.delete();
+			tempfile.renameTo(file);
+
+		}
+		catch (IOException e)
+		{
+
+			e.printStackTrace();
+
+		}
 	}
 
 	public void readFile()
 	{
+		final String filepath = "Reports";
+		final String filename = "OrderList.csv";
 
+		File file = new File(filepath + "\\" + filename);
+
+		String data;
+		String[] values;
+		try
+		{
+			Scanner input = new Scanner(file);
+
+			//burn the header
+			if (input.hasNext())
+			{
+				data = input.nextLine();
+			}
+
+			int index = 0;
+			Order tempOrder = new Order();
+
+			while (input.hasNextLine())
+			{
+				data = input.nextLine();
+				values = data.split(",");
+
+				if (values[0].equals(""))
+				{
+					tempOrder.getProductList().add(new Product(new Item(values[4], Double.parseDouble(values[5]), values[6]), Integer.parseInt(values[7]), Integer.parseInt(values[8]), values[9]));
+				}
+				else
+				{
+					if (index != 0)
+					{
+						order_list.add(tempOrder);
+					}
+
+					tempOrder = new Order();
+
+					tempOrder.setId(values[0]);
+					tempOrder.setOrderReceived(Boolean.parseBoolean(values[1]));
+					tempOrder.setDateCreated(values[2]);
+					tempOrder.setDateReceived(values[3]);
+					tempOrder.getProductList().add(new Product(new Item(values[4], Double.parseDouble(values[5]), values[6]), Integer.parseInt(values[7]), Integer.parseInt(values[8]), values[9]));
+				}
+				index++;
+			}
+
+			order_list.add(tempOrder);
+
+			input.close();
+
+		}
+		catch (FileNotFoundException e)
+		{
+			makeDummyData();
+		}
 	}
 
 	@Override

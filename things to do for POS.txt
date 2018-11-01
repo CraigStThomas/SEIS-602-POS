@@ -2,15 +2,12 @@ things to do for POS
 
 features to implement
     file reading/writing
-        transactions
-            read
-                boot-up only
         orders
             read
-                boot-up only
+                boot-up only-
             write
-                order created
-                order purged
+                order created-
+                order purged-
                 order received
                 order item added
 

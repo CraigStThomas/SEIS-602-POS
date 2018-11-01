@@ -22,7 +22,8 @@ public class Main extends Application
 	@Override
 	public void start(Stage primaryStage)
 	{
-		orderList = new OrderList(1);
+		orderList = new OrderList();
+		orderList.readFile();
 		inventory = new Inventory(orderList);
 		inventory.readFile();
 		usersList = new UsersList();
@@ -104,6 +105,8 @@ public class Main extends Application
 //		System.out.println();
 
 //		System.out.println(transactionHistory);
+
+//		orderList.writeFile();
 
 
 		applicationWindows.add(new HomeWindow(inventory, usersList, orderList, transactionHistory));

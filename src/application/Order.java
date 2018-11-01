@@ -45,6 +45,11 @@ public class Order
 		return this.id;
 	}
 
+	public void setId(String inputId)
+	{
+		id = inputId;
+	}
+
 	public String getDateCreated()
 	{
 		return dateCreated;

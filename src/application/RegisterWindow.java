@@ -7,6 +7,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -201,7 +202,7 @@ public class RegisterWindow extends BaseWindow
         };
     }
 
-    protected GridPane createTransaction()
+    protected ScrollPane createTransaction()
     {
     	disableRegisterButtons();
 
@@ -388,10 +389,12 @@ public class RegisterWindow extends BaseWindow
 
 		myGridPane.setStyle("-fx-border-color: black");
 
-		return myGridPane;
+		ScrollPane thisScrollPane = new ScrollPane(myGridPane);
+
+		return thisScrollPane;
     }
 
-    protected GridPane itemReturn(Transaction transaction)
+    protected ScrollPane itemReturn(Transaction transaction)
     {
     	int verticalIndex = 0;
     	int horizontalIndex = 0;
@@ -646,7 +649,9 @@ public class RegisterWindow extends BaseWindow
     		myGridPane.setStyle("-fx-border-color: black");
     	}
 
-    	return myGridPane;
+    	ScrollPane thisScrollPane = new ScrollPane(myGridPane);
+
+    	return thisScrollPane;
     }
 
     @Override
